@@ -1,6 +1,6 @@
 # Terraform Module for Proxmox Cloudinit Virtual Machines
 
-This module will deploy Cloudinit-Enabled Virtual Machine to your Proxmox nodes. 
+This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmox Node(s). 
 
 ## Table of content
 
