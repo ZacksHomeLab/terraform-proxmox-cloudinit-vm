@@ -7,7 +7,7 @@ locals {
   template = "ubuntu-2204"
 
   # Virtual Machine Storage Location
-  storage_location = "local-pve"
+  storage_location = "pve1-zfs"
 
 
   # DHCP is prioritized
@@ -21,14 +21,4 @@ locals {
     #IPv6Gateway = ""
     #IPv6Address = ""
   }
-
-  ### CLOUDINIT SETTINGS
-  #username     = "my_username"
-  #password     = "my_password"
-  #searchdomain = "yourdomain.com"
-  #nameservers  = "192.168.2.15 192.168.2.16"
-
-  #sshkeys = <<EOF
-  #  ssh-rsa AAAAB3Nzak5qOoe5Zc5ZuLPTIXxYJpub5kQhBNXoSXQ== zackshomelab\zack@ZHLDT01
-  #  EOF
 }

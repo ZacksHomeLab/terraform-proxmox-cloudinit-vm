@@ -38,11 +38,4 @@ module "cloudinit_vm" {
 
   # IP Configuration for NIC #1
   ipconfig0 = local.network_config
-
-  # Cloudinit settings
-  ciuser       = local.username != null ? local.username : null
-  cipassword   = local.password != null ? local.password : null
-  sshkeys      = local.sshkeys != null ? local.sshkeys : null
-  searchdomain = local.searchdomain != null ? local.searchdomain : null
-  nameserver   = local.nameservers != null ? local.nameservers : null
 }
