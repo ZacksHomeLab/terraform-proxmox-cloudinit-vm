@@ -1,0 +1,38 @@
+# TFState files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info*.terraform.lock.hcl
+.terraform*
+
+# Backend file
+backend.hcl
+
+# VSCode files
+.vscode/
+
+# (Mac only) Ignore DS_Store files
+.DS_Store
+
+# Backup Files
+*.bak
+
+# SSH Keys (shouldn't be in your git project but just in case)
+*.pem
+
+# Directories
+.terraform/
+
+# Logs
+*.log
+
+# GraphViz files
+*.dot
+
+# Credentials files
+credentials*
+
+# Terragrunt cache
+*.terragrunt-cache*
+
+# Terraform variables
+*.tfvars
