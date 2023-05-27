@@ -518,18 +518,40 @@ variable "nameserver" {
 
 variable "networks" {
   type = list(object({
-    model     = optional(string)
-    bridge    = optional(string)
-    firewall  = optional(bool)
-    link_down = optional(bool)
+    model     = string
+    bridge    = optional(string, "nat")
+    firewall  = optional(bool, false)
+    link_down = optional(bool, false)
     macaddr   = optional(string)
-    mtu       = optional(number)
-    queues    = optional(number)
-    replicate = optional(number)
-    rate      = optional(number)
-    vlan_tag  = optional(number)
+    queues    = optional(number, 1)
+    rate      = optional(number, 0)
+    vlan_tag  = optional(number, -1)
   }))
-  default = []
+
+  validation {
+    condition     = alltrue([for network in var.networks : contains(["e1000", "e1000-82540em", "e1000-82544gc", "e1000-82545em", "i82551", "i82559er", "ne2k_isa", "ne2k_pci", "pcnet", "rtl8139", "virtio", "vmxnet3"], network.model)])
+    error_message = "Required Network Card Model. The virtio model provides the best performance with very low CPU overhead. If your guest does not support this driver, it is usually best to use e1000. Options: e1000, e1000-82540em, e1000-82544gc, e1000-82545em, i82551, i82557b, i82559er, ne2k_isa, ne2k_pci, pcnet, rtl8139, virtio, vmxnet3."
+  }
+
+  validation {
+    condition     = alltrue([for network in var.networks : network.macaddr == null || can(regex("^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$", network.macaddr))])
+    error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: ^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$"
+  }
+
+  validation {
+    condition     = alltrue([for network in var.networks : network.queues >= 0 && network.queues <= 64])
+    error_message = "Number of packet queues to be used on the device. Set a value between 0 and 64."
+  }
+
+  validation {
+    condition     = alltrue([for network in var.networks : network.rate >= 0])
+    error_message = "Rate limit in mbps (megabytes per second) as floating point number. Set a value of 0 or higher."
+  }
+
+  validation {
+    condition     = alltrue([for network in var.networks : (network.vlan_tag == -1) || (network.vlan_tag >= 1 && network.vlan_tag <= 4094)])
+    error_message = "VLAN tag to apply to packets on this interface. Set a value of 1 to 4094"
+  }
 }
 
 variable "numa" {
@@ -601,6 +623,7 @@ variable "serials" {
     id   = optional(number)
     type = optional(string)
   }))
+
   default = []
 }
 

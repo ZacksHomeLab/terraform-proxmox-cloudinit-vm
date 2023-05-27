@@ -372,9 +372,7 @@ networks = [
     firewall  = true
     link_down = false
     macaddr   = ""
-    mtu       = 1500
     queues    = 0
-    replicate = 0
     rate      = 0
     vlan_tag  = 25
   }
@@ -450,7 +448,6 @@ To prevent this issue, you **MUST** have these Cloudinit settings referenced in 
 ```hcl
   # In main.tf
   ciuser       = var.ciuser
-  cipassword   = var.cipassword
   searchdomain = var.searchdomain
   nameserver   = var.nameserver
   sshkeys      = var.sshkeys
@@ -459,7 +456,6 @@ To prevent this issue, you **MUST** have these Cloudinit settings referenced in 
 ```hcl
   # in variables.tfvars
   ciuser       = 'zack'
-  cipassword   = 'my_secret_password'
   searchdomain = 'zackshomelab.com'
   nameserver   = '192.168.2.15 192.168.2.16'
   sshkeys      = <<EOF

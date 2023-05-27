@@ -78,14 +78,12 @@ resource "proxmox_vm_qemu" "cloudinit" {
     for_each = var.networks == null ? [] : var.networks
     content {
       model     = try(network.value.model)
-      bridge    = try(network.value.bridge, "vmbr0")
-      firewall  = try(network.value.firewall, false)
-      link_down = try(network.value.link_down, false)
-      macaddr   = try(network.value.macaddr, "")
-      mtu       = try(network.value.mtu, 1500)
-      queues    = try(network.value.queues, 0)
-      rate      = try(network.value.rate, 0)
-      tag       = try(network.value.vlan_tag, -1)
+      bridge    = try(network.value.bridge)
+      firewall  = try(network.value.firewall)
+      link_down = try(network.value.link_down)
+      queues    = try(network.value.queues)
+      rate      = try(network.value.rate)
+      tag       = try(network.value.vlan_tag)
     }
   }
 
