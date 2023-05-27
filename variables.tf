@@ -122,22 +122,129 @@ variable "description" {
 
 variable "disks" {
   type = list(object({
-    type        = optional(string)
-    storage     = optional(string)
-    size        = optional(string)
-    format      = optional(string)
-    cache       = optional(string)
-    backup      = optional(bool)
-    iothread    = optional(number)
-    replicate   = optional(number)
-    mbps        = optional(number)
-    mbps_rd     = optional(number)
-    mbps_rd_max = optional(number)
-    mbps_wr     = optional(number)
-    mbps_wr_max = optional(number)
+    type               = string
+    storage            = string
+    size               = string
+    format             = optional(string, "raw")
+    cache              = optional(string, "none")
+    backup             = optional(bool, false)
+    iothread           = optional(number, 0)
+    discard            = optional(number, 0)
+    replicate          = optional(number, 0)
+    ssd                = optional(number, 0)
+    mbps               = optional(number, 0)
+    mbps_rd            = optional(number, 0)
+    mbps_rd_max        = optional(number, 0)
+    mbps_wr            = optional(number, 0)
+    mbps_wr_max        = optional(number, 0)
+    iops               = optional(number, 0)
+    iops_rd            = optional(number, 0)
+    iops_rd_max        = optional(number, 0)
+    iops_rd_max_length = optional(number, 0)
+    iops_wr            = optional(number, 0)
+    iops_wr_max        = optional(number, 0)
+    iops_wr_max_length = optional(number, 0)
   }))
 
-  default = []
+  validation {
+    condition     = alltrue([for disk in var.disks : contains(["ide", "sata", "scsi", "virtio"], disk.type)])
+    error_message = "Required The type of disk device to add. Options: ide, sata, scsi, virtio."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : can(regex("^\\d+[GMK]$", disk.size))])
+    error_message = "The size of the created disk, format must match the regex \\d+[GMK], where G, M, and K represent Gigabytes, Megabytes, and Kilobytes respectively."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : contains(["cow", "cloop", "qcow", "qcow2", "qed", "vmdk", "raw"], disk.format)])
+    error_message = "The drive’s backing file’s data format. Options are: 'cow, 'cloop', 'qcow', 'qcow2', 'qed', 'vmdk', 'raw'."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : contains(["directsync", "none", "unsafe", "writeback", "writethrough"], disk.cache)])
+    error_message = "The drive’s cache mode. Options: directsync, none, unsafe, writeback, writethrough"
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iothread >= 0 && disk.iothread <= 1])
+    error_message = "The only options for iothread are 0 and 1. To enable iothread, set this value to 1."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.replicate >= 0 && disk.replicate <= 1])
+    error_message = "The only options for replicate are 0 and 1. To enable disk replication, set this value to 1."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.ssd == 0 || (disk.ssd >= 0 && contains(["ide", "sata", "scsi"], disk.type))])
+    error_message = "The only valid options are 0 and 1. If you are not using a drive type of 'ide', 'sata', or 'scsi', set ssd to 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.discard >= 0 && disk.discard <= 1])
+    error_message = "The only options are 0 and 1. To enable disk discard, set this value to 1. You may need to set ssd emulate to 1 as well. See https://pve.proxmox.com/pve-docs/chapter-qm.html#qm_hard_disk."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.mbps >= 0])
+    error_message = "Maximum r/w speed in megabytes per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.mbps_rd >= 0])
+    error_message = "Maximum read speed in megabytes per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.mbps_rd_max >= 0])
+    error_message = "Maximum read speed in megabytes per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.mbps_wr >= 0])
+    error_message = "Maximum write speed in megabytes per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.mbps_wr_max >= 0])
+    error_message = "Maximum throttled write pool in megabytes per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops >= 0])
+    error_message = "Maximum r/w I/O in operations per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_rd >= 0])
+    error_message = "Maximum read I/O in operations per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_rd_max >= 0])
+    error_message = "Maximum unthrottled read I/O pool in operations per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_rd_max_length >= 0])
+    error_message = "Maximum length of read I/O bursts in seconds. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_wr >= 0])
+    error_message = "Maximum write I/O in operations per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_wr_max >= 0])
+    error_message = "Maximum unthrottled write I/O pool in operations per second. Set to 0 for unlimited or set a value greater than 0."
+  }
+
+  validation {
+    condition     = alltrue([for disk in var.disks : disk.iops_wr_max_length >= 0])
+    error_message = "Maximum length of write I/O bursts in seconds. Set to 0 for unlimited or set a value greater than 0."
+  }
 }
 
 variable "force_create" {

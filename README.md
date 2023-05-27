@@ -220,14 +220,13 @@ You can have one or many disks for a Virtual Machine. Here's a couple examples:
 
 ```
 disks = [
-  # This will create disk virito0
   {
-    type = "virtio"
+    type    = "virtio"
     storage = "local-pve"
-    size = "10G"
-    format = "raw"
-    cache = "none"
-    backup = true
+    size    = "10G"
+    format  = "raw"
+    cache   = "none"
+    backup  = true
   }
 ]
 ```
@@ -238,16 +237,16 @@ disks = [
 disks = [
   # This will create disk virtio0
   {
-    type = "virtio"
+    type =   "virtio"
     storage = "local-pve"
-    size = "10G"
+    size    = "10G"
   },
   # This will create disk scsi0
   {
-    type = "scsi"
+    type    = "scsi"
     storage = "other-storage-location"
-    size = "25G"
-    cache = "writethrough"
+    size    = "25G"
+    cache   = "writethrough"
   }
 ]
 ```
@@ -258,19 +257,26 @@ disks = [
 disks = [
   # This will create disk virito0
   {
-    type        = "virtio"
-    storage     = "local-pve"
-    size        = "10G"
-    format      = "raw"
-    cache       = "unsafe"
-    backup      = true
-    iothread    = 0
-    replicate   = 0
-    mbps        = 0
-    mbps_rd     = 0
-    mbps_rd_max = 0
-    mbps_wr     = 0
-    mbps_wr_max = 0
+    type               = "virtio"
+    storage            = "local-pve"
+    size               = "10G"
+    format             = "raw"
+    cache              = "none"
+    backup             = false
+    iothread           = 0
+    replicate          = 0
+    mbps               = 0
+    mbps_rd            = 0
+    mbps_rd_max        = 0
+    mbps_wr            = 0
+    mbps_wr_max        = 0
+    iops               = 0
+    iops_rd            = 0
+    iops_rd_max        = 0
+    iops_rd_max_length = 0
+    iops_wr            = 0
+    iops_wr_max        = 0
+    iops_wr_max_length = 0
   }
 ]
 ```
