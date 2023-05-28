@@ -286,12 +286,12 @@ variable "hotplug" {
 variable "ipconfig0" {
   description = "The 1st IP address to assign."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
 
   default = {}
@@ -300,12 +300,12 @@ variable "ipconfig0" {
 variable "ipconfig1" {
   description = "The 2nd IP address to assign."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
 
   default = {}
@@ -314,12 +314,12 @@ variable "ipconfig1" {
 variable "ipconfig2" {
   description = "The 3rd IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -327,12 +327,12 @@ variable "ipconfig2" {
 variable "ipconfig3" {
   description = "The 4th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -340,12 +340,12 @@ variable "ipconfig3" {
 variable "ipconfig4" {
   description = "The 5th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -353,12 +353,12 @@ variable "ipconfig4" {
 variable "ipconfig5" {
   description = "The 6th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -366,12 +366,12 @@ variable "ipconfig5" {
 variable "ipconfig6" {
   description = "The 7th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -379,12 +379,12 @@ variable "ipconfig6" {
 variable "ipconfig7" {
   description = "The 8th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -392,12 +392,12 @@ variable "ipconfig7" {
 variable "ipconfig8" {
   description = "The 9th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -405,12 +405,12 @@ variable "ipconfig8" {
 variable "ipconfig9" {
   description = "The 10th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -418,12 +418,12 @@ variable "ipconfig9" {
 variable "ipconfig10" {
   description = "The 11th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -431,12 +431,12 @@ variable "ipconfig10" {
 variable "ipconfig11" {
   description = "The 12th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -444,12 +444,12 @@ variable "ipconfig11" {
 variable "ipconfig12" {
   description = "The 13th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -457,12 +457,12 @@ variable "ipconfig12" {
 variable "ipconfig13" {
   description = "The 14th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -470,12 +470,12 @@ variable "ipconfig13" {
 variable "ipconfig14" {
   description = "The 15th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }
@@ -483,12 +483,12 @@ variable "ipconfig14" {
 variable "ipconfig15" {
   description = "The 16th IP address to assign to this resource."
   type = object({
-    IPv4Gateway = optional(string)
-    IPv6Gateway = optional(string)
-    IPv4Address = optional(string)
-    IPv6Address = optional(string)
-    DHCP        = optional(bool, false)
-    DHCP6       = optional(bool, false)
+    gateway  = optional(string)
+    gateway6 = optional(string)
+    ip       = optional(string)
+    ip6      = optional(string)
+    dhcp     = optional(bool, false)
+    dhcp6    = optional(bool, false)
   })
   default = {}
 }

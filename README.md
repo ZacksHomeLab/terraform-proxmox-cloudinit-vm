@@ -306,7 +306,7 @@ This example will create network adapter `net0` and assign it a DHCP address:
 
   # IP Configuration for net0
   ipconfig0 = {
-    DHCP = true
+    dhcp = true
   }
 ```
 
@@ -346,16 +346,16 @@ This example demonstrates how to configure 3 network adapters (`net0`, `net1`, a
 
   # IP Configuration for net1
   ipconfig1 = {
-    IPv4Address = "192.168.1.3/24"
-    IPv4Gateway = "192.168.1.1"
-    #IPv6Address = ""
-    #IPv6Gateway = ""
+    ip        = "192.168.1.3/24"
+    gateway   = "192.168.1.1"
+    #ip6      = ""
+    #gateway6 = ""
   }
 
   # IP Configuration for net2
   ipconfig2 = {
-    DHCP  = true
-    DHCP6 = true
+    dhcp  = true
+    dhcp6 = true
   }
 ```
 
@@ -379,12 +379,12 @@ networks = [
 ]
 
 ipconfig0 = {
-  IPv4Gateway = "192.168.1.1"
-  IPv6Gateway = "2001::1"
-  IPv4Address = 192.168.1.254/24
-  IPv6Address = "2607:f8b0:4000:808::200e"
-  DHCP        = false
-  DHCP6       = false
+  gateway  = "192.168.1.1"
+  gateway6 = "2001::1"
+  ip       = 192.168.1.254/24
+  ip6      = "2607:f8b0:4000:808::200e"
+  dhcp     = false
+  dhcp6    = false
 }
 ```
 [Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#network-block)

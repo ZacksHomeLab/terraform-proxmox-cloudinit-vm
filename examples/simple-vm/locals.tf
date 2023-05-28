@@ -7,18 +7,18 @@ locals {
   template = "ubuntu-2204"
 
   # Virtual Machine Storage Location
-  storage_location = "pve1-zfs"
+  storage_location = "local-pve"
 
 
   # DHCP is prioritized
   # Set DHCP to false and configure the IPV4 Address and Gateway to set a static IP
   # This module also supports IPv6 address and gateway. You can set IPv6 DHCP to true if you support IPv6
   network_config = {
-    DHCP = true
-    #IPv4Address = "192.168.2.200/24"
-    #IPv4Gateway = "192.168.2.1"
-    #DHCP6 = false
-    #IPv6Gateway = ""
-    #IPv6Address = ""
+    dhcp = true
+    #ip = "192.168.2.200/24"
+    #gateway = "192.168.2.1"
+    #dhcp6 = false
+    #gateway6 = ""
+    #ip6 = ""
   }
 }
