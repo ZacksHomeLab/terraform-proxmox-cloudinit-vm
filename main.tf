@@ -35,7 +35,7 @@ resource "proxmox_vm_qemu" "cloudinit" {
   sockets = var.sockets
   cores   = var.cores
   cpu     = var.cpu
-  numa    = can(regex("memory", var.hotplug))
+  numa    = can(regex("memory", var.hotplug)) && var.numa ? var.numa : false
 
   # Disks
   dynamic "disk" {
@@ -109,6 +109,7 @@ resource "proxmox_vm_qemu" "cloudinit" {
   ciuser                  = var.ciuser != null ? var.ciuser : null
   cipassword              = var.cipassword != null ? var.cipassword : null
   cicustom                = var.cicustom != null ? var.cicustom : null
+  ci_wait                 = var.ci_wait != null ? var.ci_wait : null
   cloudinit_cdrom_storage = var.cicustom != null && var.cloudinit_cdrom_storage != null ? var.cloudinit_cdrom_storage : null
   searchdomain            = var.searchdomain != null ? var.searchdomain : null
   nameserver              = var.nameserver != null ? var.nameserver : null

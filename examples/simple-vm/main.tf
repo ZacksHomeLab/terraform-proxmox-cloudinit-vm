@@ -6,8 +6,8 @@ module "cloudinit_vm" {
   source = "../../"
 
   vm_name     = "ubuntu-simple-vm"
-  target_node = local.target_node
-  clone       = local.template
+  target_node = var.target_node
+  clone       = var.clone
 
   description = "This is an example Virtual Machine."
   onboot      = true
@@ -22,8 +22,8 @@ module "cloudinit_vm" {
     # Disk #1
     {
       type    = "virtio"
-      storage = local.storage_location
-      size    = "5G"
+      storage = var.storage_location
+      size    = "10G"
     }
   ]
 

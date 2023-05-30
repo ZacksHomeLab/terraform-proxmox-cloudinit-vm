@@ -1,6 +1,6 @@
 variable "agent" {
-  type        = number
   description = "Set to 1 to enable the QEMU Guest Agent. Note, you must run the qemu-guest-agent daemon in the guest for this to have any effect."
+  type        = number
   default     = 1
 
   validation {
@@ -16,8 +16,8 @@ variable "automatic_reboot" {
 }
 
 variable "balloon" {
-  type        = number
   description = "The minimum amount of memory to allocate to the VM in Megabytes, when Automatic Memory Allocation is desired. Proxmox will enable a balloon device on the guest to manage dynamic allocation. See the docs about memory for more info."
+  type        = number
   default     = 0
 
   validation {
@@ -27,8 +27,8 @@ variable "balloon" {
 }
 
 variable "bios" {
-  type        = string
   description = "The BIOS to use, options are seabios or ovmf for UEFI."
+  type        = string
   default     = "seabios"
 
   validation {
@@ -38,57 +38,56 @@ variable "bios" {
 }
 
 variable "boot" {
-  type        = string
   description = "The boot order for the VM. For example: order=scsi0;ide2;net0."
+  type        = string
   default     = null
 }
 
 variable "bootdisk" {
-  type        = string
   description = "Enable booting from specified disk. You shouldn't need to change it under most circumstances."
+  type        = string
   default     = null
 }
 
 variable "ci_wait" {
-  type        = number
   description = "How to long in seconds to wait for before provisioning."
+  type        = number
   default     = 30
 }
 
 variable "cicustom" {
-  type        = string
   description = "Instead specifying ciuser, cipasword, etc… you can specify the path to a custom cloud-init config file here. Grants more flexibility in configuring cloud-init."
+  type        = string
   default     = null
 }
 
 variable "cipassword" {
-  type        = string
   description = "Override the default cloud-init user's password. Sensitive."
+  type        = string
   sensitive   = true
   default     = null
 }
 
 variable "ciuser" {
-  type        = string
   description = "Override the default cloud-init user for provisioning."
+  type        = string
   default     = null
 }
 
 variable "clone" {
-  type        = string
   description = "The base VM from which to clone to create the new VM. Note that clone is mutually exclussive with pxe and iso modes."
-  nullable    = false
+  type        = string
 }
 
 variable "cloudinit_cdrom_storage" {
-  type        = string
   description = "Set the storage location for the cloud-init drive. Required when specifying cicustom."
+  type        = string
   default     = null
 }
 
 variable "cores" {
-  type        = number
   description = "The number of CPU cores per CPU socket to allocate to the VM."
+  type        = number
   default     = 1
 
   validation {
@@ -98,8 +97,8 @@ variable "cores" {
 }
 
 variable "cpu" {
-  type        = string
   description = "The type of CPU to emulate in the Guest. See the docs about CPU Types for more info."
+  type        = string
   default     = "host"
 
   validation {
@@ -115,12 +114,13 @@ variable "create_vm" {
 }
 
 variable "description" {
-  type        = string
   description = "The description of the VM. Shows as the 'Notes' field in the Proxmox GUI."
+  type        = string
   default     = ""
 }
 
 variable "disks" {
+  description = "The disk(s) of the Virtual Machine."
   type = list(object({
     type               = string
     storage            = string
@@ -248,38 +248,38 @@ variable "disks" {
 }
 
 variable "force_create" {
-  type        = bool
   description = "If false, and a vm of the same name, on the same node exists, terraform will attempt to reconfigure that VM with these settings. Set to true to always create a new VM (note, the name of the VM must still be unique, otherwise an error will be produced.)."
+  type        = bool
   default     = false
 }
 
 variable "force_recreate_on_change_of" {
-  type        = string
   description = "If the value of this string changes, the VM will be recreated. Useful for allowing this resource to be recreated when arbitrary attributes change. An example where this is useful is a cloudinit configuration (as the cicustom attribute points to a file not the content)."
+  type        = string
   default     = null
 }
 
 variable "full_clone" {
-  type        = bool
   description = "Set to true to create a full clone, or false to create a linked clone. See the docs about cloning for more info. Only applies when clone is set."
+  type        = bool
   default     = true
 }
 
 variable "hagroup" {
-  type        = string
   description = "The HA group identifier the resource belongs to (requires hastate to be set!)."
+  type        = string
   default     = null
 }
 
 variable "hastate" {
-  type        = string
   description = "Requested HA state for the resource. One of 'started', 'stopped', 'enabled', 'disabled', or 'ignored'. See the docs about HA for more info."
+  type        = string
   default     = null
 }
 
 variable "hotplug" {
-  type        = string
   description = "Comma delimited list of hotplug features to enable. Options: network, disk, cpu, memory, usb. Set to 0 to disable hotplug."
+  type        = string
   default     = "cpu,network,disk,usb"
 }
 
@@ -493,15 +493,9 @@ variable "ipconfig15" {
   default = {}
 }
 
-variable "iso" {
-  type        = string
-  description = "The name of the ISO image to mount to the VM in the format: [storage pool]:iso/[name of iso file]. Only applies when clone is not set. Either clone or iso needs to be set. Note that iso is mutually exclussive with clone and pxe modes."
-  default     = null
-}
-
 variable "memory" {
-  type        = number
   description = "The amount of memory to allocate to the VM in Megabytes."
+  type        = number
   default     = 1024
 
   validation {
@@ -511,12 +505,13 @@ variable "memory" {
 }
 
 variable "nameserver" {
-  type        = string
   description = "Sets default DNS server for guest."
+  type        = string
   default     = null
 }
 
 variable "networks" {
+  description = "The network adapter(s) to be added onto the Virtual Machine."
   type = list(object({
     model     = string
     bridge    = optional(string, "nat")
@@ -555,26 +550,26 @@ variable "networks" {
 }
 
 variable "numa" {
-  type        = bool
   description = "Whether to enable Non-Uniform Memory Access in the guest."
+  type        = bool
   default     = false
 }
 
 variable "onboot" {
-  type        = bool
   description = "Whether to have the VM startup after the PVE node starts."
+  type        = bool
   default     = false
 }
 
 variable "oncreate" {
-  type        = bool
   description = "Whether to have the VM startup after the VM is created."
+  type        = bool
   default     = true
 }
 
 variable "os_type" {
-  type        = string
   description = "Which provisioning method to use, based on the OS type. Options: ubuntu, centos, cloud-init."
+  type        = string
   default     = "cloud-init"
 
   validation {
@@ -584,26 +579,20 @@ variable "os_type" {
 }
 
 variable "pool" {
-  type        = string
   description = "The resource pool to which the VM will be added."
+  type        = string
   default     = null
 }
 
-variable "pxe" {
-  type        = bool
-  description = "If set to true, enable PXE boot of the VM. Also requires a boot order be set with Network included (eg boot = 'order=net0;scsi0'). Note that pxe is mutually exclusive with iso and clone modes."
-  default     = false
-}
-
 variable "qemu_os" {
-  type        = string
   description = "The type of OS in the guest. Set properly to allow Proxmox to enable optimizations for the appropriate guest OS. It takes the value from the source template and ignore any changes to resource configuration parameter."
+  type        = string
   default     = "l26"
 }
 
 variable "scsihw" {
-  type        = string
   description = "The SCSI controller to emulate. Options: lsi, lsi53c810, megasas, pvscsi, virtio-scsi-pci, virtio-scsi-single."
+  type        = string
   default     = "virtio-scsi-pci"
 
   validation {
@@ -613,12 +602,13 @@ variable "scsihw" {
 }
 
 variable "searchdomain" {
-  type        = string
   description = "Sets default DNS search domain suffix."
+  type        = string
   default     = null
 }
 
 variable "serials" {
+  description = "Creates a serial device inside the Virtual Machine (up to a max of 4)."
   type = list(object({
     id   = optional(number)
     type = optional(string)
@@ -628,8 +618,8 @@ variable "serials" {
 }
 
 variable "sockets" {
-  type        = number
   description = "The number of CPU sockets for the Master Node."
+  type        = number
   default     = 1
 
   validation {
@@ -639,36 +629,36 @@ variable "sockets" {
 }
 
 variable "sshkeys" {
-  type        = string
   description = "Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user."
+  type        = string
   default     = null
 }
 
 variable "startup" {
-  type        = string
   description = "The startup and shutdown behaviour"
+  type        = string
   default     = ""
 }
 
 variable "tablet" {
-  type        = bool
   description = "Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC."
+  type        = bool
   default     = true
 }
 
 variable "tags" {
-  type        = string
   description = "Tags of the VM. This is only meta information."
+  type        = string
   default     = null
 }
 
 variable "target_node" {
-  type        = string
   description = "The name of the Proxmox Node on which to place the VM."
-  nullable    = false
+  type        = string
 }
 
 variable "usbs" {
+  description = "The usb block is used to configure USB devices. It may be specified multiple times."
   type = list(object({
     host = optional(string)
     usb3 = optional(bool)
@@ -677,6 +667,7 @@ variable "usbs" {
 }
 
 variable "vgas" {
+  description = "The vga block is used to configure the display device. It may be specified multiple times, however only the first instance of the block will be used."
   type = list(object({
     type   = optional(string)
     memory = optional(number)
@@ -685,13 +676,12 @@ variable "vgas" {
 }
 
 variable "vm_name" {
-  type        = string
   description = "The virtual machine name."
-  nullable    = false
+  type        = string
 }
 
 variable "vmid" {
-  type        = number
   description = "The ID of the VM in Proxmox. The default value of 0 indicates it should use the next available ID in the sequence."
+  type        = number
   default     = 0
 }
