@@ -56,7 +56,7 @@ locals {
   network_adapter_1 = {
     dhcp = true
   }
-  network_model_1  = "virito"
+  network_model_1  = "virtio"
   network_bridge_1 = "vmbr0"
 
   # Network Adapter net1 IP Configuration
@@ -65,7 +65,7 @@ locals {
     ip      = "192.168.2.58/24"
     gateway = "192.168.2.1"
   }
-  network_model_2  = "virito"
+  network_model_2  = "virtio"
   network_bridge_2 = "vmbr0"
 
   # Network Adapter net2 IP Configuration
@@ -73,6 +73,6 @@ locals {
     # By default, DHCP is set to False if it isn't provided
     dhcp = true
   }
-  network_model_3  = "virito"
+  network_model_3  = "virtio"
   network_bridge_3 = "vmbr0"
 }

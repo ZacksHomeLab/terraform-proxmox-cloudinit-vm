@@ -45,3 +45,44 @@ terraform apply
 
 # Complete Virtual Machine Deployment Information
 
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=0.14 |
+| <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | 2.9.14 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_cloudinit_vm"></a> [cloudinit\_vm](#module\_cloudinit\_vm) | ../../ | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_clone"></a> [clone](#input\_clone) | The base VM from which to clone to create the new VM. Note that clone is mutually exclussive with pxe and iso modes. | `string` | n/a | yes |
+| <a name="input_storage_location_1"></a> [storage\_location\_1](#input\_storage\_location\_1) | The location of where Disk 1 will be located. | `string` | n/a | yes |
+| <a name="input_storage_location_2"></a> [storage\_location\_2](#input\_storage\_location\_2) | The location of where Disk 2 will be located. | `string` | n/a | yes |
+| <a name="input_target_node"></a> [target\_node](#input\_target\_node) | The name of the Proxmox Node on which to place the VM. | `string` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_vm_id"></a> [vm\_id](#output\_vm\_id) | The Virtual Machine's Id. |
+| <a name="output_vm_ip"></a> [vm\_ip](#output\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
+| <a name="output_vm_name"></a> [vm\_name](#output\_vm\_name) | The Virtual Machine's name. |
+| <a name="output_vm_node"></a> [vm\_node](#output\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
+| <a name="output_vm_template"></a> [vm\_template](#output\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

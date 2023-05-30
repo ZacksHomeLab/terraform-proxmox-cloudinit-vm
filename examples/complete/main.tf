@@ -48,6 +48,6 @@ module "cloudinit_vm" {
 
 
   # Cloudinit settings
-  ciuser = local.ciuser
+  ciuser  = local.ciuser
   sshkeys = local.sshkeys != null ? local.sshkeys : null
 }
