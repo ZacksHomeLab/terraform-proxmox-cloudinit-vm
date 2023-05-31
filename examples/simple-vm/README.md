@@ -28,8 +28,6 @@ Rename `terraform.tfvars.example` to `terraform.tfvars`. Once renamed, modify th
 
 I've pre-configured a network adapter residing in `locals.tf`. Feel free to change the settings of said adapter to get a feel of the syntax. 
 
-For more information on Network Adapters, see the [Network Configuration section on the home-page README.md](../../README.md#network-adapter-configurations).
-
 ## Step 4. Deploy Virtual Machine
 
 Run the following commands to deploy said Virtual Machine
