@@ -245,6 +245,11 @@ variable "disks" {
     condition     = alltrue([for disk in var.disks : disk.iops_wr_max_length >= 0])
     error_message = "Maximum length of write I/O bursts in seconds. Set to 0 for unlimited or set a value greater than 0."
   }
+
+  default = [{
+    size = "10G"
+    type = "virtio"
+  }]
 }
 
 variable "force_create" {
@@ -283,216 +288,6 @@ variable "hotplug" {
   default     = "cpu,network,disk,usb"
 }
 
-variable "ipconfig0" {
-  description = "The 1st IP address to assign."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-
-  default = {}
-}
-
-variable "ipconfig1" {
-  description = "The 2nd IP address to assign."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-
-  default = {}
-}
-
-variable "ipconfig2" {
-  description = "The 3rd IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig3" {
-  description = "The 4th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig4" {
-  description = "The 5th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig5" {
-  description = "The 6th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig6" {
-  description = "The 7th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig7" {
-  description = "The 8th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig8" {
-  description = "The 9th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig9" {
-  description = "The 10th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig10" {
-  description = "The 11th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig11" {
-  description = "The 12th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig12" {
-  description = "The 13th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig13" {
-  description = "The 14th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig14" {
-  description = "The 15th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig15" {
-  description = "The 16th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
 variable "memory" {
   description = "The amount of memory to allocate to the VM in Megabytes."
   type        = number
@@ -511,10 +306,16 @@ variable "nameserver" {
 }
 
 variable "networks" {
-  description = "The network adapter(s) to be added onto the Virtual Machine."
+  description = "The network adapters affiliated with the Virtual Machine."
   type = list(object({
+    bridge    = string
     model     = string
-    bridge    = optional(string, "nat")
+    gateway   = optional(string)
+    gateway6  = optional(string)
+    ip        = optional(string)
+    ip6       = optional(string)
+    dhcp      = optional(bool, true)
+    dhcp6     = optional(bool, false)
     firewall  = optional(bool, false)
     link_down = optional(bool, false)
     macaddr   = optional(string)
@@ -523,30 +324,10 @@ variable "networks" {
     vlan_tag  = optional(number, -1)
   }))
 
-  validation {
-    condition     = alltrue([for network in var.networks : contains(["e1000", "e1000-82540em", "e1000-82544gc", "e1000-82545em", "i82551", "i82559er", "ne2k_isa", "ne2k_pci", "pcnet", "rtl8139", "virtio", "vmxnet3"], network.model)])
-    error_message = "Required Network Card Model. The virtio model provides the best performance with very low CPU overhead. If your guest does not support this driver, it is usually best to use e1000. Options: e1000, e1000-82540em, e1000-82544gc, e1000-82545em, i82551, i82557b, i82559er, ne2k_isa, ne2k_pci, pcnet, rtl8139, virtio, vmxnet3."
-  }
-
-  validation {
-    condition     = alltrue([for network in var.networks : network.macaddr == null || can(regex("^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$", network.macaddr))])
-    error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: ^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$"
-  }
-
-  validation {
-    condition     = alltrue([for network in var.networks : network.queues >= 0 && network.queues <= 64])
-    error_message = "Number of packet queues to be used on the device. Set a value between 0 and 64."
-  }
-
-  validation {
-    condition     = alltrue([for network in var.networks : network.rate >= 0])
-    error_message = "Rate limit in mbps (megabytes per second) as floating point number. Set a value of 0 or higher."
-  }
-
-  validation {
-    condition     = alltrue([for network in var.networks : (network.vlan_tag == -1) || (network.vlan_tag >= 1 && network.vlan_tag <= 4094)])
-    error_message = "VLAN tag to apply to packets on this interface. Set a value of 1 to 4094"
-  }
+  default = [{
+    bridge = "nat"
+    model  = "virtio"
+  }]
 }
 
 variable "numa" {
