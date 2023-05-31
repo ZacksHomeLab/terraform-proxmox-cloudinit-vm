@@ -11,7 +11,7 @@ locals {
       #dhcp6 = false
       #gateway6 = ""
       #ip6 = ""
-      bridge = "nat" # May need to adjust this to vmbr0 or whatever adapter you have in Proxmox
+      bridge = "vmbr0" # May need to adjust this to vmbr0 or whatever adapter you have in Proxmox
     }
   ]
 }
