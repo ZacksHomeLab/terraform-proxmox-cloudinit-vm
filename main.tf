@@ -24,7 +24,7 @@ resource "proxmox_vm_qemu" "cloudinit" {
   agent    = var.agent
 
   hastate = var.hastate
-  hagroup = var.hastate
+  hagroup = var.hastate != null && var.hagroup != null ? var.hagroup : ""
   hotplug = var.hotplug
   scsihw  = var.scsihw
   qemu_os = var.qemu_os
