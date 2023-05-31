@@ -191,142 +191,135 @@ locals {
   ])), null) : null
 
   # See comments above ipconfig0
-  ipconfig9 = try(join(",", compact([
+  ipconfig9 = length(var.networks) >= 10 ? try(join(",", compact([
+    var.networks[9].dhcp ? "" : var.networks[9].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[9].gateway))
+    ? "gw=${var.networks[9].gateway}" : "",
 
-    var.ipconfig9.dhcp ? "" : var.ipconfig9.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig9.gateway))
-    ? "gw=${var.ipconfig9.gateway}" : "",
+    var.networks[9].dhcp6 ? "" : var.networks[9].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[9].gateway6))
+    ? "gw6=${var.networks[9].gateway6}" : "",
 
-    var.ipconfig9.dhcp6 ? "" : var.ipconfig9.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig9.gateway6))
-    ? "gw6=${var.ipconfig9.gateway6}" : "",
+    var.networks[9].dhcp ? "ip=dhcp" : var.networks[9].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[9].ip))
+    ? "ip=${var.networks[9].ip}" : "",
 
-    var.ipconfig9.dhcp ? "ip=dhcp" : var.ipconfig9.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig9.ip))
-    ? "ip=${var.ipconfig9.ip}" : "",
-
-    var.ipconfig9.dhcp6 ? "ip6=dhcp" : var.ipconfig9.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig9.ip6))
-    ? "ip6=${var.ipconfig9.ip6}" : ""
-  ])), null)
-
-  # See comments above ipconfig0
-  ipconfig10 = try(join(",", compact([
-
-    var.ipconfig10.dhcp ? "" : var.ipconfig10.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig10.gateway))
-    ? "gw=${var.ipconfig10.gateway}" : "",
-
-    var.ipconfig10.dhcp6 ? "" : var.ipconfig10.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig10.gateway6))
-    ? "gw6=${var.ipconfig10.gateway6}" : "",
-
-    var.ipconfig10.dhcp ? "ip=dhcp" : var.ipconfig10.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig10.ip))
-    ? "ip=${var.ipconfig10.ip}" : "",
-
-    var.ipconfig10.dhcp6 ? "ip6=dhcp" : var.ipconfig10.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig10.ip6))
-    ? "ip6=${var.ipconfig10.ip6}" : ""
-  ])), null)
+    var.networks[9].dhcp6 ? "ip6=dhcp" : var.networks[9].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[9].ip6))
+    ? "ip6=${var.networks[9].ip6}" : ""
+  ])), null) : null
 
   # See comments above ipconfig0
-  ipconfig11 = try(join(",", compact([
+  ipconfig10 = length(var.networks) >= 11 ? try(join(",", compact([
+    var.networks[10].dhcp ? "" : var.networks[10].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[10].gateway))
+    ? "gw=${var.networks[10].gateway}" : "",
 
-    var.ipconfig11.dhcp ? "" : var.ipconfig11.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig11.gateway))
-    ? "gw=${var.ipconfig11.gateway}" : "",
+    var.networks[10].dhcp6 ? "" : var.networks[10].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[10].gateway6))
+    ? "gw6=${var.networks[10].gateway6}" : "",
 
-    var.ipconfig11.dhcp6 ? "" : var.ipconfig11.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig11.gateway6))
-    ? "gw6=${var.ipconfig11.gateway6}" : "",
+    var.networks[10].dhcp ? "ip=dhcp" : var.networks[10].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[10].ip))
+    ? "ip=${var.networks[10].ip}" : "",
 
-    var.ipconfig11.dhcp ? "ip=dhcp" : var.ipconfig11.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig11.ip))
-    ? "ip=${var.ipconfig11.ip}" : "",
-
-    var.ipconfig11.dhcp6 ? "ip6=dhcp" : var.ipconfig11.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig11.ip6))
-    ? "ip6=${var.ipconfig11.ip6}" : ""
-  ])), null)
-
-  # See comments above ipconfig0
-  ipconfig12 = try(join(",", compact([
-
-    var.ipconfig12.dhcp ? "" : var.ipconfig12.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig12.gateway))
-    ? "gw=${var.ipconfig12.gateway}" : "",
-
-    var.ipconfig12.dhcp6 ? "" : var.ipconfig12.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig12.gateway6))
-    ? "gw6=${var.ipconfig12.gateway6}" : "",
-
-    var.ipconfig12.dhcp ? "ip=dhcp" : var.ipconfig12.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig12.ip))
-    ? "ip=${var.ipconfig12.ip}" : "",
-
-    var.ipconfig12.dhcp6 ? "ip6=dhcp" : var.ipconfig12.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig12.ip6))
-    ? "ip6=${var.ipconfig12.ip6}" : ""
-  ])), null)
+    var.networks[10].dhcp6 ? "ip6=dhcp" : var.networks[10].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[10].ip6))
+    ? "ip6=${var.networks[10].ip6}" : ""
+  ])), null) : null
 
   # See comments above ipconfig0
-  ipconfig13 = try(join(",", compact([
+  ipconfig11 = length(var.networks) >= 12 ? try(join(",", compact([
+    var.networks[11].dhcp ? "" : var.networks[11].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[11].gateway))
+    ? "gw=${var.networks[11].gateway}" : "",
 
-    var.ipconfig13.dhcp ? "" : var.ipconfig13.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig13.gateway))
-    ? "gw=${var.ipconfig13.gateway}" : "",
+    var.networks[11].dhcp6 ? "" : var.networks[11].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[11].gateway6))
+    ? "gw6=${var.networks[11].gateway6}" : "",
 
-    var.ipconfig13.dhcp6 ? "" : var.ipconfig13.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig13.gateway6))
-    ? "gw6=${var.ipconfig13.gateway6}" : "",
+    var.networks[11].dhcp ? "ip=dhcp" : var.networks[11].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[11].ip))
+    ? "ip=${var.networks[11].ip}" : "",
 
-    var.ipconfig13.dhcp ? "ip=dhcp" : var.ipconfig13.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig13.ip))
-    ? "ip=${var.ipconfig13.ip}" : "",
-
-    var.ipconfig13.dhcp6 ? "ip6=dhcp" : var.ipconfig13.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig13.ip6))
-    ? "ip6=${var.ipconfig13.ip6}" : ""
-  ])), null)
-
-  # See comments above ipconfig0
-  ipconfig14 = try(join(",", compact([
-
-    var.ipconfig14.dhcp ? "" : var.ipconfig14.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig14.gateway))
-    ? "gw=${var.ipconfig14.gateway}" : "",
-
-    var.ipconfig14.dhcp6 ? "" : var.ipconfig14.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig14.gateway6))
-    ? "gw6=${var.ipconfig14.gateway6}" : "",
-
-    var.ipconfig14.dhcp ? "ip=dhcp" : var.ipconfig14.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig14.ip))
-    ? "ip=${var.ipconfig14.ip}" : "",
-
-    var.ipconfig14.dhcp6 ? "ip6=dhcp" : var.ipconfig14.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig14.ip6))
-    ? "ip6=${var.ipconfig14.ip6}" : ""
-  ])), null)
+    var.networks[11].dhcp6 ? "ip6=dhcp" : var.networks[11].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[11].ip6))
+    ? "ip6=${var.networks[11].ip6}" : ""
+  ])), null) : null
 
   # See comments above ipconfig0
-  ipconfig15 = try(join(",", compact([
+  ipconfig12 = length(var.networks) >= 13 ? try(join(",", compact([
+    var.networks[12].dhcp ? "" : var.networks[12].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[12].gateway))
+    ? "gw=${var.networks[12].gateway}" : "",
 
-    var.ipconfig15.dhcp ? "" : var.ipconfig15.gateway != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.ipconfig15.gateway))
-    ? "gw=${var.ipconfig15.gateway}" : "",
+    var.networks[12].dhcp6 ? "" : var.networks[12].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[12].gateway6))
+    ? "gw6=${var.networks[12].gateway6}" : "",
 
-    var.ipconfig15.dhcp6 ? "" : var.ipconfig15.gateway6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.ipconfig15.gateway6))
-    ? "gw6=${var.ipconfig15.gateway6}" : "",
+    var.networks[12].dhcp ? "ip=dhcp" : var.networks[12].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[12].ip))
+    ? "ip=${var.networks[12].ip}" : "",
 
-    var.ipconfig15.dhcp ? "ip=dhcp" : var.ipconfig15.ip != null
-    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.ipconfig15.ip))
-    ? "ip=${var.ipconfig15.ip}" : "",
+    var.networks[12].dhcp6 ? "ip6=dhcp" : var.networks[12].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[12].ip6))
+    ? "ip6=${var.networks[12].ip6}" : ""
+  ])), null) : null
 
-    var.ipconfig15.dhcp6 ? "ip6=dhcp" : var.ipconfig15.ip6 != null
-    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.ipconfig15.ip6))
-    ? "ip6=${var.ipconfig15.ip6}" : ""
-  ])), null)
+  # See comments above ipconfig0
+  ipconfig13 = length(var.networks) >= 14 ? try(join(",", compact([
+    var.networks[13].dhcp ? "" : var.networks[13].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[13].gateway))
+    ? "gw=${var.networks[13].gateway}" : "",
+
+    var.networks[13].dhcp6 ? "" : var.networks[13].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[13].gateway6))
+    ? "gw6=${var.networks[13].gateway6}" : "",
+
+    var.networks[13].dhcp ? "ip=dhcp" : var.networks[13].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[13].ip))
+    ? "ip=${var.networks[13].ip}" : "",
+
+    var.networks[13].dhcp6 ? "ip6=dhcp" : var.networks[13].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[13].ip6))
+    ? "ip6=${var.networks[13].ip6}" : ""
+  ])), null) : null
+
+  # See comments above ipconfig0
+  ipconfig14 = length(var.networks) >= 15 ? try(join(",", compact([
+    var.networks[14].dhcp ? "" : var.networks[14].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[14].gateway))
+    ? "gw=${var.networks[14].gateway}" : "",
+
+    var.networks[14].dhcp6 ? "" : var.networks[14].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[14].gateway6))
+    ? "gw6=${var.networks[14].gateway6}" : "",
+
+    var.networks[14].dhcp ? "ip=dhcp" : var.networks[14].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[14].ip))
+    ? "ip=${var.networks[14].ip}" : "",
+
+    var.networks[14].dhcp6 ? "ip6=dhcp" : var.networks[14].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[14].ip6))
+    ? "ip6=${var.networks[14].ip6}" : ""
+  ])), null) : null
+
+  # See comments above ipconfig0
+  ipconfig15 = length(var.networks) == 16 ? try(join(",", compact([
+    var.networks[15].dhcp ? "" : var.networks[15].gateway != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b$", var.networks[15].gateway))
+    ? "gw=${var.networks[15].gateway}" : "",
+
+    var.networks[15].dhcp6 ? "" : var.networks[15].gateway6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$", var.networks[15].gateway6))
+    ? "gw6=${var.networks[15].gateway6}" : "",
+
+    var.networks[15].dhcp ? "ip=dhcp" : var.networks[15].ip != null
+    && can(regex("^\\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\\b(\\/([0-9]|[1-2][0-9]|3[0-2]))?$", var.networks[15].ip))
+    ? "ip=${var.networks[15].ip}" : "",
+
+    var.networks[15].dhcp6 ? "ip6=dhcp" : var.networks[15].ip6 != null
+    && can(regex("^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\\/(?:[0-9]|[1-9]\\d|1[0-2][0-8])$", var.networks[15].ip6))
+    ? "ip6=${var.networks[15].ip6}" : ""
+  ])), null) : null
 }
