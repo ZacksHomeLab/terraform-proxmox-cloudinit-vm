@@ -19,12 +19,12 @@ resource "proxmox_vm_qemu" "cloudinit" {
   force_recreate_on_change_of = var.force_recreate_on_change_of
 
   tablet   = var.tablet
-  boot     = var.boot != null ? var.boot : null
-  bootdisk = var.bootdisk != null ? var.bootdisk : null
+  boot     = var.boot
+  bootdisk = var.bootdisk
   agent    = var.agent
 
-  hastate = var.hastate != null ? var.hastate : null
-  hagroup = var.hastate != null ? var.hagroup : null
+  hastate = var.hastate
+  hagroup = var.hastate
   hotplug = var.hotplug
   scsihw  = var.scsihw
   qemu_os = var.qemu_os
@@ -81,9 +81,9 @@ resource "proxmox_vm_qemu" "cloudinit" {
       bridge    = try(network.value.bridge)
       firewall  = try(network.value.firewall)
       link_down = try(network.value.link_down)
-      queues    = try(network.value.queues)
-      rate      = try(network.value.rate)
-      tag       = try(network.value.vlan_tag)
+      #queues    = try(network.value.queues)
+      rate = try(network.value.rate)
+      tag  = try(network.value.vlan_tag)
     }
   }
 
@@ -106,33 +106,33 @@ resource "proxmox_vm_qemu" "cloudinit" {
   }
 
   # Cloud-Init Drive
-  ciuser                  = var.ciuser != null ? var.ciuser : null
-  cipassword              = var.cipassword != null ? var.cipassword : null
-  cicustom                = var.cicustom != null ? var.cicustom : null
-  ci_wait                 = var.ci_wait != null ? var.ci_wait : null
+  ciuser                  = var.ciuser
+  cipassword              = var.cipassword
+  cicustom                = var.cicustom
+  ci_wait                 = var.ci_wait
   cloudinit_cdrom_storage = var.cicustom != null && var.cloudinit_cdrom_storage != null ? var.cloudinit_cdrom_storage : null
-  searchdomain            = var.searchdomain != null ? var.searchdomain : null
-  nameserver              = var.nameserver != null ? var.nameserver : null
-  sshkeys                 = var.sshkeys != null ? var.sshkeys : null
+  searchdomain            = var.searchdomain
+  nameserver              = var.nameserver
+  sshkeys                 = var.sshkeys
 
 
   # ipconfig area
-  ipconfig0  = local.ipconfig0 != null ? local.ipconfig0 : null
-  ipconfig1  = local.ipconfig1 != null ? local.ipconfig1 : null
-  ipconfig2  = local.ipconfig2 != null ? local.ipconfig2 : null
-  ipconfig3  = local.ipconfig3 != null ? local.ipconfig3 : null
-  ipconfig4  = local.ipconfig4 != null ? local.ipconfig4 : null
-  ipconfig5  = local.ipconfig5 != null ? local.ipconfig5 : null
-  ipconfig6  = local.ipconfig6 != null ? local.ipconfig6 : null
-  ipconfig7  = local.ipconfig7 != null ? local.ipconfig7 : null
-  ipconfig8  = local.ipconfig8 != null ? local.ipconfig8 : null
-  ipconfig9  = local.ipconfig9 != null ? local.ipconfig9 : null
-  ipconfig10 = local.ipconfig10 != null ? local.ipconfig10 : null
-  ipconfig11 = local.ipconfig11 != null ? local.ipconfig11 : null
-  ipconfig12 = local.ipconfig12 != null ? local.ipconfig12 : null
-  ipconfig13 = local.ipconfig13 != null ? local.ipconfig13 : null
-  ipconfig14 = local.ipconfig14 != null ? local.ipconfig14 : null
-  ipconfig15 = local.ipconfig15 != null ? local.ipconfig15 : null
+  ipconfig0  = local.ipconfig0 != null ? local.ipconfig0 : ""
+  ipconfig1  = local.ipconfig1 != null ? local.ipconfig1 : ""
+  ipconfig2  = local.ipconfig2 != null ? local.ipconfig2 : ""
+  ipconfig3  = local.ipconfig3 != null ? local.ipconfig3 : ""
+  ipconfig4  = local.ipconfig4 != null ? local.ipconfig4 : ""
+  ipconfig5  = local.ipconfig5 != null ? local.ipconfig5 : ""
+  ipconfig6  = local.ipconfig6 != null ? local.ipconfig6 : ""
+  ipconfig7  = local.ipconfig7 != null ? local.ipconfig7 : ""
+  ipconfig8  = local.ipconfig8 != null ? local.ipconfig8 : ""
+  ipconfig9  = local.ipconfig9 != null ? local.ipconfig9 : ""
+  ipconfig10 = local.ipconfig10 != null ? local.ipconfig10 : ""
+  ipconfig11 = local.ipconfig11 != null ? local.ipconfig11 : ""
+  ipconfig12 = local.ipconfig12 != null ? local.ipconfig12 : ""
+  ipconfig13 = local.ipconfig13 != null ? local.ipconfig13 : ""
+  ipconfig14 = local.ipconfig14 != null ? local.ipconfig14 : ""
+  ipconfig15 = local.ipconfig15 != null ? local.ipconfig15 : ""
 
-  tags = var.tags != null ? join(",", var.tags) : null
+  tags = var.tags != null ? join(",", var.tags) : ""
 }

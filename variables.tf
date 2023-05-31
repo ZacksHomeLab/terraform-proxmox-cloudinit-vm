@@ -40,13 +40,13 @@ variable "bios" {
 variable "boot" {
   description = "The boot order for the VM. For example: order=scsi0;ide2;net0."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "bootdisk" {
   description = "Enable booting from specified disk. You shouldn't need to change it under most circumstances."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "ci_wait" {
@@ -58,20 +58,20 @@ variable "ci_wait" {
 variable "cicustom" {
   description = "Instead specifying ciuser, cipasword, etc… you can specify the path to a custom cloud-init config file here. Grants more flexibility in configuring cloud-init."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "cipassword" {
   description = "Override the default cloud-init user's password. Sensitive."
   type        = string
   sensitive   = true
-  default     = null
+  default     = ""
 }
 
 variable "ciuser" {
   description = "Override the default cloud-init user for provisioning."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "clone" {
@@ -82,7 +82,7 @@ variable "clone" {
 variable "cloudinit_cdrom_storage" {
   description = "Set the storage location for the cloud-init drive. Required when specifying cicustom."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "cores" {
@@ -256,7 +256,7 @@ variable "force_create" {
 variable "force_recreate_on_change_of" {
   description = "If the value of this string changes, the VM will be recreated. Useful for allowing this resource to be recreated when arbitrary attributes change. An example where this is useful is a cloudinit configuration (as the cicustom attribute points to a file not the content)."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "full_clone" {
@@ -268,13 +268,13 @@ variable "full_clone" {
 variable "hagroup" {
   description = "The HA group identifier the resource belongs to (requires hastate to be set!)."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "hastate" {
   description = "Requested HA state for the resource. One of 'started', 'stopped', 'enabled', 'disabled', or 'ignored'. See the docs about HA for more info."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "hotplug" {
@@ -297,7 +297,7 @@ variable "memory" {
 variable "nameserver" {
   description = "Sets default DNS server for guest."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "networks" {
@@ -314,9 +314,9 @@ variable "networks" {
     firewall  = optional(bool, false)
     link_down = optional(bool, false)
     macaddr   = optional(string)
-    queues    = optional(number, 1)
-    rate      = optional(number, 0)
-    vlan_tag  = optional(number, -1)
+    #queues    = optional(number, 1)
+    rate     = optional(number, 0)
+    vlan_tag = optional(number, -1)
   }))
 
   validation {
@@ -329,10 +329,11 @@ variable "networks" {
     error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: ^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$"
   }
 
+  /*
   validation {
     condition     = alltrue([for network in var.networks : network.queues >= 0 && network.queues <= 64])
     error_message = "Number of packet queues to be used on the device. Set a value between 0 and 64."
-  }
+  }*/
 
   validation {
     condition     = alltrue([for network in var.networks : network.rate >= 0])
@@ -382,7 +383,7 @@ variable "os_type" {
 variable "pool" {
   description = "The resource pool to which the VM will be added."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "qemu_os" {
@@ -405,7 +406,7 @@ variable "scsihw" {
 variable "searchdomain" {
   description = "Sets default DNS search domain suffix."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "serials" {
@@ -432,7 +433,7 @@ variable "sockets" {
 variable "sshkeys" {
   description = "Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "startup" {
@@ -449,8 +450,8 @@ variable "tablet" {
 
 variable "tags" {
   description = "Tags of the VM. This is only meta information."
-  type        = string
-  default     = null
+  type        = list(string)
+  default     = []
 }
 
 variable "target_node" {
