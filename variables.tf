@@ -303,7 +303,7 @@ variable "nameserver" {
 variable "networks" {
   description = "The network adapters affiliated with the Virtual Machine."
   type = list(object({
-    bridge    = optional(string, "nat")
+    bridge    = optional(string, "vmbr0")
     model     = optional(string, "virtio")
     gateway   = optional(string)
     gateway6  = optional(string)
@@ -314,9 +314,9 @@ variable "networks" {
     firewall  = optional(bool, false)
     link_down = optional(bool, false)
     macaddr   = optional(string)
-    #queues    = optional(number, 1)
-    rate     = optional(number, 0)
-    vlan_tag = optional(number, -1)
+    queues    = optional(number, 1)
+    rate      = optional(number, 0)
+    vlan_tag  = optional(number, -1)
   }))
 
   validation {
@@ -329,11 +329,10 @@ variable "networks" {
     error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: ^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$"
   }
 
-  /*
   validation {
     condition     = alltrue([for network in var.networks : network.queues >= 0 && network.queues <= 64])
     error_message = "Number of packet queues to be used on the device. Set a value between 0 and 64."
-  }*/
+  }
 
   validation {
     condition     = alltrue([for network in var.networks : network.rate >= 0])
@@ -349,6 +348,8 @@ variable "networks" {
     condition     = length(var.networks) > 0 && length(var.networks) <= 16
     error_message = "You must have at least 1 network adapter and no less than 16 total adapters."
   }
+
+  default = []
 }
 
 variable "numa" {
@@ -463,7 +464,7 @@ variable "usbs" {
   description = "The usb block is used to configure USB devices. It may be specified multiple times."
   type = list(object({
     host = optional(string)
-    usb3 = optional(bool)
+    usb3 = optional(bool, false)
   }))
   default = []
 }
@@ -471,7 +472,7 @@ variable "usbs" {
 variable "vgas" {
   description = "The vga block is used to configure the display device. It may be specified multiple times, however only the first instance of the block will be used."
   type = list(object({
-    type   = optional(string)
+    type   = optional(string, "std")
     memory = optional(number)
   }))
   default = []

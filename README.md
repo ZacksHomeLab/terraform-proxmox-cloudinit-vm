@@ -29,6 +29,7 @@ This module assumes you have a Virtual Machine template with QEMU installed. If 
   - [Issue: Terraform timing out](#issue-terraform-timing-out)
   - [Issue: Cloudinit drive already exists](#issue-cloudinit-drive-already-exists)
   - [Issue: Terraform expects Cloudinit changes](#issue-terraform-expects-cloudinit-changes)
+  - [Issue: Invalid parameter 'queues'](#issue-invalid-parameter-queues)
   - [Issue: Terraform Proxmox Provider Crashing](#issue-terraform-proxmox-provider-crashing)
     - [Crash: Incorrect Disk Hardware](#crash-incorrect-disk-hardware)
     - [Crash: SSD Emulation](#crash-ssd-emulation)
@@ -410,6 +411,17 @@ No changes. Your infrastructure matches the configuration.
 Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
 ```
 
+## Issue: Invalid parameter 'queues'
+
+If you provision a Virtual Machine with a non-existant bridge, you may get the following error:
+
+```
+generating cloud-init ISO
+kvm: -netdev type=user,id=net0,hostname=test123,queues=1: Invalid parameter 'queues'
+TASK ERROR: start failed: QEMU exited with code 1
+```
+
+I did not have bridge `nat` created on my Proxmox host, thus, generating the above error. By setting the network bridge to an existing bridge, the error has subsided. 
 
 ## Issue: Terraform Proxmox Provider Crashing
 

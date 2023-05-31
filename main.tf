@@ -41,26 +41,26 @@ resource "proxmox_vm_qemu" "cloudinit" {
   dynamic "disk" {
     for_each = var.disks == null ? [] : var.disks
     content {
-      type               = try(disk.value.type)
-      storage            = try(disk.value.storage)
-      size               = try(disk.value.size)
-      format             = try(disk.value.format)
-      cache              = try(disk.value.cache)
-      backup             = try(disk.value.backup)
-      iothread           = try(disk.value.iothread)
-      replicate          = try(disk.value.replicate)
-      mbps               = try(disk.value.mbps)
-      mbps_rd            = try(disk.value.mbps_rd)
-      mbps_rd_max        = try(disk.value.mbps_rd_max)
-      mbps_wr            = try(disk.value.mbps_wr)
-      mbps_wr_max        = try(disk.value.mbps_wr_max)
-      iops               = try(disk.value.iops)
-      iops_rd            = try(disk.value.iops_rd)
-      iops_rd_max        = try(disk.value.iops_rd_max)
-      iops_rd_max_length = try(disk.value.iops_rd_max_length)
-      iops_wr            = try(disk.value.iops_wr)
-      iops_wr_max        = try(disk.value.iops_wr_max)
-      iops_wr_max_length = try(disk.value.iops_wr_max_length)
+      type               = disk.value.type
+      storage            = disk.value.storage
+      size               = disk.value.size
+      format             = disk.value.format
+      cache              = disk.value.cache
+      backup             = disk.value.backup
+      iothread           = disk.value.iothread
+      replicate          = disk.value.replicate
+      mbps               = disk.value.mbps
+      mbps_rd            = disk.value.mbps_rd
+      mbps_rd_max        = disk.value.mbps_rd_max
+      mbps_wr            = disk.value.mbps_wr
+      mbps_wr_max        = disk.value.mbps_wr_max
+      iops               = disk.value.iops
+      iops_rd            = disk.value.iops_rd
+      iops_rd_max        = disk.value.iops_rd_max
+      iops_rd_max_length = disk.value.iops_rd_max_length
+      iops_wr            = disk.value.iops_wr
+      iops_wr_max        = disk.value.iops_wr_max
+      iops_wr_max_length = disk.value.iops_wr_max_length
     }
   }
 
@@ -68,8 +68,8 @@ resource "proxmox_vm_qemu" "cloudinit" {
   dynamic "vga" {
     for_each = var.vgas == null ? [] : var.vgas
     content {
-      type   = try(vga.value.vga_type, "std")
-      memory = try(vga.value.memory)
+      type   = vga.value.vga_type
+      memory = vga.value.memory
     }
   }
 
@@ -77,13 +77,13 @@ resource "proxmox_vm_qemu" "cloudinit" {
   dynamic "network" {
     for_each = var.networks == null ? [] : var.networks
     content {
-      model     = try(network.value.model)
-      bridge    = try(network.value.bridge)
-      firewall  = try(network.value.firewall)
-      link_down = try(network.value.link_down)
-      #queues    = try(network.value.queues)
-      rate = try(network.value.rate)
-      tag  = try(network.value.vlan_tag)
+      model     = network.value.model
+      bridge    = network.value.bridge
+      firewall  = network.value.firewall
+      link_down = network.value.link_down
+      queues    = network.value.queues
+      rate      = network.value.rate
+      tag       = network.value.vlan_tag
     }
   }
 
@@ -91,8 +91,8 @@ resource "proxmox_vm_qemu" "cloudinit" {
   dynamic "serial" {
     for_each = var.serials == null ? [] : var.serials
     content {
-      id   = try(serial.value.id)
-      type = try(serial.value.serial_type)
+      id   = serial.value.id
+      type = serial.value.serial_type
     }
   }
 
@@ -100,8 +100,8 @@ resource "proxmox_vm_qemu" "cloudinit" {
   dynamic "usb" {
     for_each = var.usbs == null ? [] : var.usbs
     content {
-      host = try(usb.value.host)
-      usb3 = try(usb.value.usb3, false)
+      host = usb.value.host
+      usb3 = usb.value.usb3
     }
   }
 
@@ -110,7 +110,7 @@ resource "proxmox_vm_qemu" "cloudinit" {
   cipassword              = var.cipassword
   cicustom                = var.cicustom
   ci_wait                 = var.ci_wait
-  cloudinit_cdrom_storage = var.cicustom != null && var.cloudinit_cdrom_storage != null ? var.cloudinit_cdrom_storage : null
+  cloudinit_cdrom_storage = var.cicustom != null && var.cloudinit_cdrom_storage != null ? var.cloudinit_cdrom_storage : ""
   searchdomain            = var.searchdomain
   nameserver              = var.nameserver
   sshkeys                 = var.sshkeys
