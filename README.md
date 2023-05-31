@@ -1,11 +1,21 @@
 # Terraform Module for Proxmox Cloudinit Virtual Machines
 
-This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmox Node(s). 
+This module supports the following configurations:
+* Create a Virtual Machine from a QEMU-Enabled template.
+* Combined the syntax of ipconfig0-15 and Networks for easier multi-network card configurations
+* Support of multi-disk deployments
+
+This module assumes you have a Virtual Machine template with QEMU installed. If you do not, follow the instructions under [Getting Started](#getting-started) to create yourself a template.
 
 # Table of Contents
 
 - [Terraform Module for Proxmox Cloudinit Virtual Machines](#terraform-module-for-proxmox-cloudinit-virtual-machines)
 - [Table of Contents](#table-of-contents)
+- [Usage](#usage)
+  - [Basic Deployment](#basic-deployment)
+  - [Multiple Disks](#multiple-disks)
+  - [Multiple Network Adapters](#multiple-network-adapters)
+- [Examples](#examples)
 - [Getting Started](#getting-started)
   - [Step 1. Access Proxmox Shell](#step-1-access-proxmox-shell)
   - [Step 2. Download Ubuntu 22.04 image](#step-2-download-ubuntu-2204-image)
@@ -15,10 +25,6 @@ This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmo
     - [Step 4b. Cloudinit Credentials](#step-4b-cloudinit-credentials)
     - [Step 4c. Cloudinit Network Settings](#step-4c-cloudinit-network-settings)
   - [Step 5. Convert Virtual Machine to Template](#step-5-convert-virtual-machine-to-template)
-- [Using this Module](#using-this-module)
-  - [Disk Configurations](#disk-configurations)
-  - [Network Adapter configurations](#network-adapter-configurations)
-  - [Cloudinit Configurations](#cloudinit-configurations)
 - [Common Issues](#common-issues)
   - [Issue: Terraform timing out](#issue-terraform-timing-out)
   - [Issue: Cloudinit drive already exists](#issue-cloudinit-drive-already-exists)
@@ -35,15 +41,116 @@ This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmo
   - [Outputs](#outputs)
 
 
+# Usage
+
+NOTE: To utilize this module, you ***MUST*** have a QEMU-Enabled Template. To see how to build one, follow the instructions under [Getting Started](#getting-started)
+
+## Basic Deployment
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  # Disk virtio0
+  disks = [{
+    size    = "10G"
+    storage = "local-pve"
+  }]
+
+  # Network Adapter net0
+  networks = [{
+    dhcp = true
+  }]
+}
+```
+
+## Multiple Disks
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  cores  = 2
+  memory = 2048
+
+  # Disk 1: virtio0
+  # Disk 2: scsi0
+  disks = [
+    {
+      size    = "20G"
+      storage = "local-pve"
+    },
+    {
+      size    = "10G"
+      type    = "scsi"
+      storage = "my-other-storage"
+    }
+  ]
+
+  # Network Adapter net0
+  networks = [{
+    dhcp = true
+  }]
+}
+```
+
+## Multiple Network Adapters
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  cores  = 2
+  memory = 2048
+
+  # Disk 1: virtio0
+  disks [{
+    size    = "20G"
+    storage = "local-pve"
+  }]
+
+  # Network Adapter 1: net0
+  # Network Adapter 2: net1
+  networks = [
+    { 
+      ip      = "192.168.2.51/24"
+      gateway = "192.168.2.1"
+      bridge  = "vmbr0
+    },
+    {
+      ip       = "192.168.3.51/24"
+      gateway  = "192.168.3.1"
+      bridge   = "vmbr1"
+      vlan_tag = 3
+    }
+  ]
+}
+```
+
+# Examples
+
+* [Simple-VM](/examples/simple-vm/) - Basic Virtual Machine deployment in Proxmox.
+* [Multiple Network Adapters](/examples/multiple-nics/) - Virtual Machine with multiple Network Adapters.
+* [Complete](/examples/complete/) - An advanced deployment with misc. configurations.
+
 # Getting Started
 You must have an image, template, or Clone that supports Cloudinit with QEMU Guest Agent installed. 
 
 If you **DO NOT** have QEMU Guest Agent installed on your image, template, or clone, Terraform will timeout during said deployment while responding with `500` status codes as it cannot see the IP Address of said machine.
 
-If you want to setup an image to test this moodule, steps 1 through 5 will demonstrate how to create a Virtual Machine template with Ubuntu 22.04.
-
-If you already have a template, you can skip to [Using this Module](#using-this-module)
-
+If you want to setup a template to test this moodule, steps 1 through 5 will demonstrate how to create a Virtual Machine template with Ubuntu 22.04.
 
 ## Step 1. Access Proxmox Shell
 * First, we'll need to access our node's shell. 
@@ -225,198 +332,6 @@ Once the Virtual Machine has been converted, you're ready to use this module!
 
 [Back to Table of Contents](#table-of-contents)
 
-
-# Using this Module
-
-Checkout the examples in the **example** directory on how to use this module. To view various configurations, keep scrolling!
-
-## Disk Configurations
-
-You can have one or many disks for a Virtual Machine. Here's a couple examples:
-
-**Example 1: Single Disk**
-
-```
-disks = [
-  {
-    type    = "virtio"
-    storage = "local-pve"
-    size    = "10G"
-    format  = "raw"
-    cache   = "none"
-    backup  = true
-  }
-]
-```
-
-**Example 2: Multiple Disks**
-
-```
-disks = [
-  # This will create disk virtio0
-  {
-    type =   "virtio"
-    storage = "local-pve"
-    size    = "10G"
-  },
-  # This will create disk scsi0
-  {
-    type    = "scsi"
-    storage = "other-storage-location"
-    size    = "25G"
-    cache   = "writethrough"
-  }
-]
-```
-
-**Example 3: Full Disk Config**
-
-```
-disks = [
-  # This will create disk virito0
-  {
-    type               = "virtio"
-    storage            = "local-pve"
-    size               = "10G"
-    format             = "raw"
-    cache              = "none"
-    backup             = false
-    iothread           = 0
-    replicate          = 0
-    mbps               = 0
-    mbps_rd            = 0
-    mbps_rd_max        = 0
-    mbps_wr            = 0
-    mbps_wr_max        = 0
-    iops               = 0
-    iops_rd            = 0
-    iops_rd_max        = 0
-    iops_rd_max_length = 0
-    iops_wr            = 0
-    iops_wr_max        = 0
-    iops_wr_max_length = 0
-  }
-]
-```
-
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#disk-block)
-
-[Back to Table of Contents](#table-of-contents)
-
-## Network Adapter configurations
-
-You may have up to 16 Network Adapters on your Virtual Machine. You first need to create a network adapter and give it a `type` and `bridge`. Once the network adapter is created, you can assign it a specific IP Configuration by setting `ipconfiX` where `X` is the network adapter (the counter starts at `0` and ends at `15`). For example, if you have one network adapter, you would assign its IP configuration to `ipconfig0`. (See below examples)
-
-NOTE: If you set these adapters to use `DHCP`, `DHCP` takes priority over static assigned IP Addresses.
-
-
-**Example 1. Single Network Adapter**
-
-This example will create network adapter `net0` and assign it a DHCP address:
-```
-  networks = [
-    # This will create Network Adapter net0
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    }
-  ]
-
-  # IP Configuration for net0
-  ipconfig0 = {
-    dhcp = true
-  }
-```
-
-**Example 2. Multiple Network Adapters**
-
-This example demonstrates how to configure 3 network adapters (`net0`, `net1`, and `net2`):
-* `net0` adapter will be configured with DHCP
-* `net1` adapter will be configured with a Static IP
-* `net2` adapter will be configured with both IPv4 & IPv6 DHCP Addresses
-
-```
-  # Network Cards
-  networks = [
-    # This will create Network Adapter net0
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    },
-
-    # This will create Network Adapter net1
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    },
-
-    # This will create Network Adapter net2
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    }
-  ]
-
-  # IP Configuration for net0
-  ipconfig0 = {
-    DHCP = true
-  }
-
-  # IP Configuration for net1
-  ipconfig1 = {
-    ip        = "192.168.1.3/24"
-    gateway   = "192.168.1.1"
-    #ip6      = ""
-    #gateway6 = ""
-  }
-
-  # IP Configuration for net2
-  ipconfig2 = {
-    dhcp  = true
-    dhcp6 = true
-  }
-```
-
-**Example 3. Full Network Adapter Config**
-
-This example will show all of the options that a network adapter can be configured with.
-
-```
-
-networks = [
-  {
-    model     = "virtio"
-    bridge    = "vmbr0"
-    firewall  = true
-    link_down = false
-    macaddr   = ""
-    queues    = 0
-    rate      = 0
-    vlan_tag  = 25
-  }
-]
-
-ipconfig0 = {
-  gateway  = "192.168.1.1"
-  gateway6 = "2001::1"
-  ip       = 192.168.1.254/24
-  ip6      = "2607:f8b0:4000:808::200e"
-  dhcp     = false
-  dhcp6    = false
-}
-```
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#network-block)
-
-[Back to Table of Contents](#table-of-contents)
-
-## Cloudinit Configurations
-
-I highly recommend reading section [Issue: Terraform expects Cloudinit changes](#issue-terraform-expects-cloudinit-changes) on how to properly implement Cloudinit settings.
-
-
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#provision-through-cloud-init)
-
-[Back to Table of Contents](#table-of-contents)
 
 # Common Issues
 
