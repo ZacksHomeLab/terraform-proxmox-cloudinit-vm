@@ -122,9 +122,9 @@ variable "description" {
 variable "disks" {
   description = "The disk(s) of the Virtual Machine."
   type = list(object({
-    type               = string
     storage            = string
     size               = string
+    type               = optional(string, "virtio")
     format             = optional(string, "raw")
     cache              = optional(string, "none")
     backup             = optional(bool, false)
@@ -245,12 +245,6 @@ variable "disks" {
     condition     = alltrue([for disk in var.disks : disk.iops_wr_max_length >= 0])
     error_message = "Maximum length of write I/O bursts in seconds. Set to 0 for unlimited or set a value greater than 0."
   }
-
-  default = [{
-    size    = "10G"
-    storage = "local-pve"
-    type    = "virtio"
-  }]
 }
 
 variable "force_create" {
