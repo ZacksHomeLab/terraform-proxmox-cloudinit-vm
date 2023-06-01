@@ -1,10 +1,5 @@
-variable "storage_location_1" {
-  description = "The location of where Disk 1 will be located."
-  type        = string
-}
-
-variable "storage_location_2" {
-  description = "The location of where Disk 2 will be located."
+variable "storage_location" {
+  description = "The storage location for the Virtual Machine."
   type        = string
 }
 
