@@ -40,13 +40,13 @@ variable "bios" {
 variable "boot" {
   description = "The boot order for the VM. For example: order=scsi0;ide2;net0."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "bootdisk" {
   description = "Enable booting from specified disk. You shouldn't need to change it under most circumstances."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "ci_wait" {
@@ -58,20 +58,20 @@ variable "ci_wait" {
 variable "cicustom" {
   description = "Instead specifying ciuser, cipasword, etc… you can specify the path to a custom cloud-init config file here. Grants more flexibility in configuring cloud-init."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "cipassword" {
   description = "Override the default cloud-init user's password. Sensitive."
   type        = string
   sensitive   = true
-  default     = null
+  default     = ""
 }
 
 variable "ciuser" {
   description = "Override the default cloud-init user for provisioning."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "clone" {
@@ -82,7 +82,7 @@ variable "clone" {
 variable "cloudinit_cdrom_storage" {
   description = "Set the storage location for the cloud-init drive. Required when specifying cicustom."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "cores" {
@@ -122,9 +122,9 @@ variable "description" {
 variable "disks" {
   description = "The disk(s) of the Virtual Machine."
   type = list(object({
-    type               = string
     storage            = string
     size               = string
+    type               = optional(string, "virtio")
     format             = optional(string, "raw")
     cache              = optional(string, "none")
     backup             = optional(bool, false)
@@ -256,7 +256,7 @@ variable "force_create" {
 variable "force_recreate_on_change_of" {
   description = "If the value of this string changes, the VM will be recreated. Useful for allowing this resource to be recreated when arbitrary attributes change. An example where this is useful is a cloudinit configuration (as the cicustom attribute points to a file not the content)."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "full_clone" {
@@ -268,229 +268,19 @@ variable "full_clone" {
 variable "hagroup" {
   description = "The HA group identifier the resource belongs to (requires hastate to be set!)."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "hastate" {
   description = "Requested HA state for the resource. One of 'started', 'stopped', 'enabled', 'disabled', or 'ignored'. See the docs about HA for more info."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "hotplug" {
   description = "Comma delimited list of hotplug features to enable. Options: network, disk, cpu, memory, usb. Set to 0 to disable hotplug."
   type        = string
   default     = "cpu,network,disk,usb"
-}
-
-variable "ipconfig0" {
-  description = "The 1st IP address to assign."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-
-  default = {}
-}
-
-variable "ipconfig1" {
-  description = "The 2nd IP address to assign."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-
-  default = {}
-}
-
-variable "ipconfig2" {
-  description = "The 3rd IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig3" {
-  description = "The 4th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig4" {
-  description = "The 5th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig5" {
-  description = "The 6th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig6" {
-  description = "The 7th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig7" {
-  description = "The 8th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig8" {
-  description = "The 9th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig9" {
-  description = "The 10th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig10" {
-  description = "The 11th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig11" {
-  description = "The 12th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig12" {
-  description = "The 13th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig13" {
-  description = "The 14th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig14" {
-  description = "The 15th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
-}
-
-variable "ipconfig15" {
-  description = "The 16th IP address to assign to this resource."
-  type = object({
-    gateway  = optional(string)
-    gateway6 = optional(string)
-    ip       = optional(string)
-    ip6      = optional(string)
-    dhcp     = optional(bool, false)
-    dhcp6    = optional(bool, false)
-  })
-  default = {}
 }
 
 variable "memory" {
@@ -507,14 +297,20 @@ variable "memory" {
 variable "nameserver" {
   description = "Sets default DNS server for guest."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "networks" {
-  description = "The network adapter(s) to be added onto the Virtual Machine."
+  description = "The network adapters affiliated with the Virtual Machine."
   type = list(object({
-    model     = string
-    bridge    = optional(string, "nat")
+    bridge    = optional(string, "vmbr0")
+    model     = optional(string, "virtio")
+    gateway   = optional(string)
+    gateway6  = optional(string)
+    ip        = optional(string)
+    ip6       = optional(string)
+    dhcp      = optional(bool, false)
+    dhcp6     = optional(bool, false)
     firewall  = optional(bool, false)
     link_down = optional(bool, false)
     macaddr   = optional(string)
@@ -547,6 +343,13 @@ variable "networks" {
     condition     = alltrue([for network in var.networks : (network.vlan_tag == -1) || (network.vlan_tag >= 1 && network.vlan_tag <= 4094)])
     error_message = "VLAN tag to apply to packets on this interface. Set a value of 1 to 4094"
   }
+
+  validation {
+    condition     = length(var.networks) > 0 && length(var.networks) <= 16
+    error_message = "You must have at least 1 network adapter and no less than 16 total adapters."
+  }
+
+  default = []
 }
 
 variable "numa" {
@@ -581,7 +384,7 @@ variable "os_type" {
 variable "pool" {
   description = "The resource pool to which the VM will be added."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "qemu_os" {
@@ -604,7 +407,7 @@ variable "scsihw" {
 variable "searchdomain" {
   description = "Sets default DNS search domain suffix."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "serials" {
@@ -631,7 +434,7 @@ variable "sockets" {
 variable "sshkeys" {
   description = "Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "startup" {
@@ -648,8 +451,8 @@ variable "tablet" {
 
 variable "tags" {
   description = "Tags of the VM. This is only meta information."
-  type        = string
-  default     = null
+  type        = list(string)
+  default     = []
 }
 
 variable "target_node" {
@@ -661,7 +464,7 @@ variable "usbs" {
   description = "The usb block is used to configure USB devices. It may be specified multiple times."
   type = list(object({
     host = optional(string)
-    usb3 = optional(bool)
+    usb3 = optional(bool, false)
   }))
   default = []
 }
@@ -669,7 +472,7 @@ variable "usbs" {
 variable "vgas" {
   description = "The vga block is used to configure the display device. It may be specified multiple times, however only the first instance of the block will be used."
   type = list(object({
-    type   = optional(string)
+    type   = optional(string, "std")
     memory = optional(number)
   }))
   default = []

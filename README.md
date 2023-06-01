@@ -1,11 +1,21 @@
 # Terraform Module for Proxmox Cloudinit Virtual Machines
 
-This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmox Node(s). 
+This module supports the following configurations:
+* Create a Virtual Machine from a QEMU-Enabled template.
+* Combined the syntax of ipconfig0-15 and Networks for easier multi-network card configurations
+* Support of multi-disk deployments
+
+This module assumes you have a Virtual Machine template with QEMU installed. If you do not, follow the instructions under [Getting Started](#getting-started) to create yourself a template.
 
 # Table of Contents
 
 - [Terraform Module for Proxmox Cloudinit Virtual Machines](#terraform-module-for-proxmox-cloudinit-virtual-machines)
 - [Table of Contents](#table-of-contents)
+- [Usage](#usage)
+  - [Basic Deployment](#basic-deployment)
+  - [Multiple Disks](#multiple-disks)
+  - [Multiple Network Adapters](#multiple-network-adapters)
+- [Examples](#examples)
 - [Getting Started](#getting-started)
   - [Step 1. Access Proxmox Shell](#step-1-access-proxmox-shell)
   - [Step 2. Download Ubuntu 22.04 image](#step-2-download-ubuntu-2204-image)
@@ -15,14 +25,11 @@ This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmo
     - [Step 4b. Cloudinit Credentials](#step-4b-cloudinit-credentials)
     - [Step 4c. Cloudinit Network Settings](#step-4c-cloudinit-network-settings)
   - [Step 5. Convert Virtual Machine to Template](#step-5-convert-virtual-machine-to-template)
-- [Using this Module](#using-this-module)
-  - [Disk Configurations](#disk-configurations)
-  - [Network Adapter configurations](#network-adapter-configurations)
-  - [Cloudinit Configurations](#cloudinit-configurations)
 - [Common Issues](#common-issues)
   - [Issue: Terraform timing out](#issue-terraform-timing-out)
   - [Issue: Cloudinit drive already exists](#issue-cloudinit-drive-already-exists)
   - [Issue: Terraform expects Cloudinit changes](#issue-terraform-expects-cloudinit-changes)
+  - [Issue: Invalid parameter 'queues'](#issue-invalid-parameter-queues)
   - [Issue: Terraform Proxmox Provider Crashing](#issue-terraform-proxmox-provider-crashing)
     - [Crash: Incorrect Disk Hardware](#crash-incorrect-disk-hardware)
     - [Crash: SSD Emulation](#crash-ssd-emulation)
@@ -35,15 +42,116 @@ This Terraform module was created to deploy Cloudinit Virtual Machines to Proxmo
   - [Outputs](#outputs)
 
 
+# Usage
+
+NOTE: To utilize this module, you ***MUST*** have a QEMU-Enabled Template. To see how to build one, follow the instructions under [Getting Started](#getting-started)
+
+## Basic Deployment
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  # Disk virtio0
+  disks = [{
+    size    = "10G"
+    storage = "local-pve"
+  }]
+
+  # Network Adapter net0
+  networks = [{
+    dhcp = true
+  }]
+}
+```
+
+## Multiple Disks
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  cores  = 2
+  memory = 2048
+
+  # Disk 1: virtio0
+  # Disk 2: scsi0
+  disks = [
+    {
+      size    = "20G"
+      storage = "local-pve"
+    },
+    {
+      size    = "10G"
+      type    = "scsi"
+      storage = "my-other-storage"
+    }
+  ]
+
+  # Network Adapter net0
+  networks = [{
+    dhcp = true
+  }]
+}
+```
+
+## Multiple Network Adapters
+
+```
+module "cloudinit_vm" {
+  source = "github.com/ZacksHomeLab/terraform-proxmox-cloudinit-vm"
+
+  vm_name     = "ubuntu-simple-vm"
+  target_node = "pve1"
+  clone       = "name-of-template"
+
+  cores  = 2
+  memory = 2048
+
+  # Disk 1: virtio0
+  disks [{
+    size    = "20G"
+    storage = "local-pve"
+  }]
+
+  # Network Adapter 1: net0
+  # Network Adapter 2: net1
+  networks = [
+    { 
+      ip      = "192.168.2.51/24"
+      gateway = "192.168.2.1"
+      bridge  = "vmbr0
+    },
+    {
+      ip       = "192.168.3.51/24"
+      gateway  = "192.168.3.1"
+      bridge   = "vmbr1"
+      vlan_tag = 3
+    }
+  ]
+}
+```
+
+# Examples
+
+* [Simple-VM](/examples/simple-vm/) - Basic Virtual Machine deployment in Proxmox.
+* [Multiple Network Adapters](/examples/multiple-nics/) - Virtual Machine with multiple Network Adapters.
+* [Complete](/examples/complete/) - An advanced deployment with misc. configurations.
+
 # Getting Started
 You must have an image, template, or Clone that supports Cloudinit with QEMU Guest Agent installed. 
 
 If you **DO NOT** have QEMU Guest Agent installed on your image, template, or clone, Terraform will timeout during said deployment while responding with `500` status codes as it cannot see the IP Address of said machine.
 
-If you want to setup an image to test this moodule, steps 1 through 5 will demonstrate how to create a Virtual Machine template with Ubuntu 22.04.
-
-If you already have a template, you can skip to [Using this Module](#using-this-module)
-
+If you want to setup a template to test this moodule, steps 1 through 5 will demonstrate how to create a Virtual Machine template with Ubuntu 22.04.
 
 ## Step 1. Access Proxmox Shell
 * First, we'll need to access our node's shell. 
@@ -226,198 +334,6 @@ Once the Virtual Machine has been converted, you're ready to use this module!
 [Back to Table of Contents](#table-of-contents)
 
 
-# Using this Module
-
-Checkout the examples in the **example** directory on how to use this module. To view various configurations, keep scrolling!
-
-## Disk Configurations
-
-You can have one or many disks for a Virtual Machine. Here's a couple examples:
-
-**Example 1: Single Disk**
-
-```
-disks = [
-  {
-    type    = "virtio"
-    storage = "local-pve"
-    size    = "10G"
-    format  = "raw"
-    cache   = "none"
-    backup  = true
-  }
-]
-```
-
-**Example 2: Multiple Disks**
-
-```
-disks = [
-  # This will create disk virtio0
-  {
-    type =   "virtio"
-    storage = "local-pve"
-    size    = "10G"
-  },
-  # This will create disk scsi0
-  {
-    type    = "scsi"
-    storage = "other-storage-location"
-    size    = "25G"
-    cache   = "writethrough"
-  }
-]
-```
-
-**Example 3: Full Disk Config**
-
-```
-disks = [
-  # This will create disk virito0
-  {
-    type               = "virtio"
-    storage            = "local-pve"
-    size               = "10G"
-    format             = "raw"
-    cache              = "none"
-    backup             = false
-    iothread           = 0
-    replicate          = 0
-    mbps               = 0
-    mbps_rd            = 0
-    mbps_rd_max        = 0
-    mbps_wr            = 0
-    mbps_wr_max        = 0
-    iops               = 0
-    iops_rd            = 0
-    iops_rd_max        = 0
-    iops_rd_max_length = 0
-    iops_wr            = 0
-    iops_wr_max        = 0
-    iops_wr_max_length = 0
-  }
-]
-```
-
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#disk-block)
-
-[Back to Table of Contents](#table-of-contents)
-
-## Network Adapter configurations
-
-You may have up to 16 Network Adapters on your Virtual Machine. You first need to create a network adapter and give it a `type` and `bridge`. Once the network adapter is created, you can assign it a specific IP Configuration by setting `ipconfiX` where `X` is the network adapter (the counter starts at `0` and ends at `15`). For example, if you have one network adapter, you would assign its IP configuration to `ipconfig0`. (See below examples)
-
-NOTE: If you set these adapters to use `DHCP`, `DHCP` takes priority over static assigned IP Addresses.
-
-
-**Example 1. Single Network Adapter**
-
-This example will create network adapter `net0` and assign it a DHCP address:
-```
-  networks = [
-    # This will create Network Adapter net0
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    }
-  ]
-
-  # IP Configuration for net0
-  ipconfig0 = {
-    dhcp = true
-  }
-```
-
-**Example 2. Multiple Network Adapters**
-
-This example demonstrates how to configure 3 network adapters (`net0`, `net1`, and `net2`):
-* `net0` adapter will be configured with DHCP
-* `net1` adapter will be configured with a Static IP
-* `net2` adapter will be configured with both IPv4 & IPv6 DHCP Addresses
-
-```
-  # Network Cards
-  networks = [
-    # This will create Network Adapter net0
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    },
-
-    # This will create Network Adapter net1
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    },
-
-    # This will create Network Adapter net2
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    }
-  ]
-
-  # IP Configuration for net0
-  ipconfig0 = {
-    DHCP = true
-  }
-
-  # IP Configuration for net1
-  ipconfig1 = {
-    ip        = "192.168.1.3/24"
-    gateway   = "192.168.1.1"
-    #ip6      = ""
-    #gateway6 = ""
-  }
-
-  # IP Configuration for net2
-  ipconfig2 = {
-    dhcp  = true
-    dhcp6 = true
-  }
-```
-
-**Example 3. Full Network Adapter Config**
-
-This example will show all of the options that a network adapter can be configured with.
-
-```
-
-networks = [
-  {
-    model     = "virtio"
-    bridge    = "vmbr0"
-    firewall  = true
-    link_down = false
-    macaddr   = ""
-    queues    = 0
-    rate      = 0
-    vlan_tag  = 25
-  }
-]
-
-ipconfig0 = {
-  gateway  = "192.168.1.1"
-  gateway6 = "2001::1"
-  ip       = 192.168.1.254/24
-  ip6      = "2607:f8b0:4000:808::200e"
-  dhcp     = false
-  dhcp6    = false
-}
-```
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#network-block)
-
-[Back to Table of Contents](#table-of-contents)
-
-## Cloudinit Configurations
-
-I highly recommend reading section [Issue: Terraform expects Cloudinit changes](#issue-terraform-expects-cloudinit-changes) on how to properly implement Cloudinit settings.
-
-
-[Reference Documentation](https://registry.terraform.io/providers/Telmate/proxmox/latest/docs/resources/vm_qemu#provision-through-cloud-init)
-
-[Back to Table of Contents](#table-of-contents)
-
 # Common Issues
 
 ## Issue: Terraform timing out
@@ -495,6 +411,17 @@ No changes. Your infrastructure matches the configuration.
 Terraform has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
 ```
 
+## Issue: Invalid parameter 'queues'
+
+If you provision a Virtual Machine with a non-existant bridge, you may get the following error:
+
+```
+generating cloud-init ISO
+kvm: -netdev type=user,id=net0,hostname=test123,queues=1: Invalid parameter 'queues'
+TASK ERROR: start failed: QEMU exited with code 1
+```
+
+I did not have bridge `nat` created on my Proxmox host, thus, generating the above error. By setting the network bridge to an existing bridge, the error has subsided. 
 
 ## Issue: Terraform Proxmox Provider Crashing
 
@@ -572,65 +499,49 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_clone"></a> [clone](#input\_clone) | The base VM from which to clone to create the new VM. Note that clone is mutually exclussive with pxe and iso modes. | `string` | n/a | yes |
-| <a name="input_disks"></a> [disks](#input\_disks) | The disk(s) of the Virtual Machine. | <pre>list(object({<br>    type               = string<br>    storage            = string<br>    size               = string<br>    format             = optional(string, "raw")<br>    cache              = optional(string, "none")<br>    backup             = optional(bool, false)<br>    iothread           = optional(number, 0)<br>    discard            = optional(number, 0)<br>    replicate          = optional(number, 0)<br>    ssd                = optional(number, 0)<br>    mbps               = optional(number, 0)<br>    mbps_rd            = optional(number, 0)<br>    mbps_rd_max        = optional(number, 0)<br>    mbps_wr            = optional(number, 0)<br>    mbps_wr_max        = optional(number, 0)<br>    iops               = optional(number, 0)<br>    iops_rd            = optional(number, 0)<br>    iops_rd_max        = optional(number, 0)<br>    iops_rd_max_length = optional(number, 0)<br>    iops_wr            = optional(number, 0)<br>    iops_wr_max        = optional(number, 0)<br>    iops_wr_max_length = optional(number, 0)<br>  }))</pre> | n/a | yes |
-| <a name="input_networks"></a> [networks](#input\_networks) | The network adapter(s) to be added onto the Virtual Machine. | <pre>list(object({<br>    model     = string<br>    bridge    = optional(string, "nat")<br>    firewall  = optional(bool, false)<br>    link_down = optional(bool, false)<br>    macaddr   = optional(string)<br>    queues    = optional(number, 1)<br>    rate      = optional(number, 0)<br>    vlan_tag  = optional(number, -1)<br>  }))</pre> | n/a | yes |
+| <a name="input_disks"></a> [disks](#input\_disks) | The disk(s) of the Virtual Machine. | <pre>list(object({<br>    storage            = string<br>    size               = string<br>    type               = optional(string, "virtio")<br>    format             = optional(string, "raw")<br>    cache              = optional(string, "none")<br>    backup             = optional(bool, false)<br>    iothread           = optional(number, 0)<br>    discard            = optional(number, 0)<br>    replicate          = optional(number, 0)<br>    ssd                = optional(number, 0)<br>    mbps               = optional(number, 0)<br>    mbps_rd            = optional(number, 0)<br>    mbps_rd_max        = optional(number, 0)<br>    mbps_wr            = optional(number, 0)<br>    mbps_wr_max        = optional(number, 0)<br>    iops               = optional(number, 0)<br>    iops_rd            = optional(number, 0)<br>    iops_rd_max        = optional(number, 0)<br>    iops_rd_max_length = optional(number, 0)<br>    iops_wr            = optional(number, 0)<br>    iops_wr_max        = optional(number, 0)<br>    iops_wr_max_length = optional(number, 0)<br>  }))</pre> | n/a | yes |
 | <a name="input_target_node"></a> [target\_node](#input\_target\_node) | The name of the Proxmox Node on which to place the VM. | `string` | n/a | yes |
 | <a name="input_vm_name"></a> [vm\_name](#input\_vm\_name) | The virtual machine name. | `string` | n/a | yes |
 | <a name="input_agent"></a> [agent](#input\_agent) | Set to 1 to enable the QEMU Guest Agent. Note, you must run the qemu-guest-agent daemon in the guest for this to have any effect. | `number` | `1` | no |
 | <a name="input_automatic_reboot"></a> [automatic\_reboot](#input\_automatic\_reboot) | Automatically reboot the VM when parameter changes require this. If disabled the provider will emit a warning when the VM needs to be rebooted. | `bool` | `true` | no |
 | <a name="input_balloon"></a> [balloon](#input\_balloon) | The minimum amount of memory to allocate to the VM in Megabytes, when Automatic Memory Allocation is desired. Proxmox will enable a balloon device on the guest to manage dynamic allocation. See the docs about memory for more info. | `number` | `0` | no |
 | <a name="input_bios"></a> [bios](#input\_bios) | The BIOS to use, options are seabios or ovmf for UEFI. | `string` | `"seabios"` | no |
-| <a name="input_boot"></a> [boot](#input\_boot) | The boot order for the VM. For example: order=scsi0;ide2;net0. | `string` | `null` | no |
-| <a name="input_bootdisk"></a> [bootdisk](#input\_bootdisk) | Enable booting from specified disk. You shouldn't need to change it under most circumstances. | `string` | `null` | no |
+| <a name="input_boot"></a> [boot](#input\_boot) | The boot order for the VM. For example: order=scsi0;ide2;net0. | `string` | `""` | no |
+| <a name="input_bootdisk"></a> [bootdisk](#input\_bootdisk) | Enable booting from specified disk. You shouldn't need to change it under most circumstances. | `string` | `""` | no |
 | <a name="input_ci_wait"></a> [ci\_wait](#input\_ci\_wait) | How to long in seconds to wait for before provisioning. | `number` | `30` | no |
-| <a name="input_cicustom"></a> [cicustom](#input\_cicustom) | Instead specifying ciuser, cipasword, etc… you can specify the path to a custom cloud-init config file here. Grants more flexibility in configuring cloud-init. | `string` | `null` | no |
-| <a name="input_cipassword"></a> [cipassword](#input\_cipassword) | Override the default cloud-init user's password. Sensitive. | `string` | `null` | no |
-| <a name="input_ciuser"></a> [ciuser](#input\_ciuser) | Override the default cloud-init user for provisioning. | `string` | `null` | no |
-| <a name="input_cloudinit_cdrom_storage"></a> [cloudinit\_cdrom\_storage](#input\_cloudinit\_cdrom\_storage) | Set the storage location for the cloud-init drive. Required when specifying cicustom. | `string` | `null` | no |
+| <a name="input_cicustom"></a> [cicustom](#input\_cicustom) | Instead specifying ciuser, cipasword, etc… you can specify the path to a custom cloud-init config file here. Grants more flexibility in configuring cloud-init. | `string` | `""` | no |
+| <a name="input_cipassword"></a> [cipassword](#input\_cipassword) | Override the default cloud-init user's password. Sensitive. | `string` | `""` | no |
+| <a name="input_ciuser"></a> [ciuser](#input\_ciuser) | Override the default cloud-init user for provisioning. | `string` | `""` | no |
+| <a name="input_cloudinit_cdrom_storage"></a> [cloudinit\_cdrom\_storage](#input\_cloudinit\_cdrom\_storage) | Set the storage location for the cloud-init drive. Required when specifying cicustom. | `string` | `""` | no |
 | <a name="input_cores"></a> [cores](#input\_cores) | The number of CPU cores per CPU socket to allocate to the VM. | `number` | `1` | no |
 | <a name="input_cpu"></a> [cpu](#input\_cpu) | The type of CPU to emulate in the Guest. See the docs about CPU Types for more info. | `string` | `"host"` | no |
 | <a name="input_create_vm"></a> [create\_vm](#input\_create\_vm) | Controls if virtual machine should be created. | `bool` | `true` | no |
 | <a name="input_description"></a> [description](#input\_description) | The description of the VM. Shows as the 'Notes' field in the Proxmox GUI. | `string` | `""` | no |
 | <a name="input_force_create"></a> [force\_create](#input\_force\_create) | If false, and a vm of the same name, on the same node exists, terraform will attempt to reconfigure that VM with these settings. Set to true to always create a new VM (note, the name of the VM must still be unique, otherwise an error will be produced.). | `bool` | `false` | no |
-| <a name="input_force_recreate_on_change_of"></a> [force\_recreate\_on\_change\_of](#input\_force\_recreate\_on\_change\_of) | If the value of this string changes, the VM will be recreated. Useful for allowing this resource to be recreated when arbitrary attributes change. An example where this is useful is a cloudinit configuration (as the cicustom attribute points to a file not the content). | `string` | `null` | no |
+| <a name="input_force_recreate_on_change_of"></a> [force\_recreate\_on\_change\_of](#input\_force\_recreate\_on\_change\_of) | If the value of this string changes, the VM will be recreated. Useful for allowing this resource to be recreated when arbitrary attributes change. An example where this is useful is a cloudinit configuration (as the cicustom attribute points to a file not the content). | `string` | `""` | no |
 | <a name="input_full_clone"></a> [full\_clone](#input\_full\_clone) | Set to true to create a full clone, or false to create a linked clone. See the docs about cloning for more info. Only applies when clone is set. | `bool` | `true` | no |
-| <a name="input_hagroup"></a> [hagroup](#input\_hagroup) | The HA group identifier the resource belongs to (requires hastate to be set!). | `string` | `null` | no |
-| <a name="input_hastate"></a> [hastate](#input\_hastate) | Requested HA state for the resource. One of 'started', 'stopped', 'enabled', 'disabled', or 'ignored'. See the docs about HA for more info. | `string` | `null` | no |
+| <a name="input_hagroup"></a> [hagroup](#input\_hagroup) | The HA group identifier the resource belongs to (requires hastate to be set!). | `string` | `""` | no |
+| <a name="input_hastate"></a> [hastate](#input\_hastate) | Requested HA state for the resource. One of 'started', 'stopped', 'enabled', 'disabled', or 'ignored'. See the docs about HA for more info. | `string` | `""` | no |
 | <a name="input_hotplug"></a> [hotplug](#input\_hotplug) | Comma delimited list of hotplug features to enable. Options: network, disk, cpu, memory, usb. Set to 0 to disable hotplug. | `string` | `"cpu,network,disk,usb"` | no |
-| <a name="input_ipconfig0"></a> [ipconfig0](#input\_ipconfig0) | The 1st IP address to assign. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig1"></a> [ipconfig1](#input\_ipconfig1) | The 2nd IP address to assign. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig10"></a> [ipconfig10](#input\_ipconfig10) | The 11th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig11"></a> [ipconfig11](#input\_ipconfig11) | The 12th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig12"></a> [ipconfig12](#input\_ipconfig12) | The 13th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig13"></a> [ipconfig13](#input\_ipconfig13) | The 14th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig14"></a> [ipconfig14](#input\_ipconfig14) | The 15th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig15"></a> [ipconfig15](#input\_ipconfig15) | The 16th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig2"></a> [ipconfig2](#input\_ipconfig2) | The 3rd IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig3"></a> [ipconfig3](#input\_ipconfig3) | The 4th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig4"></a> [ipconfig4](#input\_ipconfig4) | The 5th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig5"></a> [ipconfig5](#input\_ipconfig5) | The 6th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig6"></a> [ipconfig6](#input\_ipconfig6) | The 7th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig7"></a> [ipconfig7](#input\_ipconfig7) | The 8th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig8"></a> [ipconfig8](#input\_ipconfig8) | The 9th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
-| <a name="input_ipconfig9"></a> [ipconfig9](#input\_ipconfig9) | The 10th IP address to assign to this resource. | <pre>object({<br>    gateway  = optional(string)<br>    gateway6 = optional(string)<br>    ip       = optional(string)<br>    ip6      = optional(string)<br>    dhcp     = optional(bool, false)<br>    dhcp6    = optional(bool, false)<br>  })</pre> | `{}` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | The amount of memory to allocate to the VM in Megabytes. | `number` | `1024` | no |
-| <a name="input_nameserver"></a> [nameserver](#input\_nameserver) | Sets default DNS server for guest. | `string` | `null` | no |
+| <a name="input_nameserver"></a> [nameserver](#input\_nameserver) | Sets default DNS server for guest. | `string` | `""` | no |
+| <a name="input_networks"></a> [networks](#input\_networks) | The network adapters affiliated with the Virtual Machine. | <pre>list(object({<br>    bridge    = optional(string, "vmbr0")<br>    model     = optional(string, "virtio")<br>    gateway   = optional(string)<br>    gateway6  = optional(string)<br>    ip        = optional(string)<br>    ip6       = optional(string)<br>    dhcp      = optional(bool, false)<br>    dhcp6     = optional(bool, false)<br>    firewall  = optional(bool, false)<br>    link_down = optional(bool, false)<br>    macaddr   = optional(string)<br>    queues    = optional(number, 1)<br>    rate      = optional(number, 0)<br>    vlan_tag  = optional(number, -1)<br>  }))</pre> | `[]` | no |
 | <a name="input_numa"></a> [numa](#input\_numa) | Whether to enable Non-Uniform Memory Access in the guest. | `bool` | `false` | no |
 | <a name="input_onboot"></a> [onboot](#input\_onboot) | Whether to have the VM startup after the PVE node starts. | `bool` | `false` | no |
 | <a name="input_oncreate"></a> [oncreate](#input\_oncreate) | Whether to have the VM startup after the VM is created. | `bool` | `true` | no |
 | <a name="input_os_type"></a> [os\_type](#input\_os\_type) | Which provisioning method to use, based on the OS type. Options: ubuntu, centos, cloud-init. | `string` | `"cloud-init"` | no |
-| <a name="input_pool"></a> [pool](#input\_pool) | The resource pool to which the VM will be added. | `string` | `null` | no |
+| <a name="input_pool"></a> [pool](#input\_pool) | The resource pool to which the VM will be added. | `string` | `""` | no |
 | <a name="input_qemu_os"></a> [qemu\_os](#input\_qemu\_os) | The type of OS in the guest. Set properly to allow Proxmox to enable optimizations for the appropriate guest OS. It takes the value from the source template and ignore any changes to resource configuration parameter. | `string` | `"l26"` | no |
 | <a name="input_scsihw"></a> [scsihw](#input\_scsihw) | The SCSI controller to emulate. Options: lsi, lsi53c810, megasas, pvscsi, virtio-scsi-pci, virtio-scsi-single. | `string` | `"virtio-scsi-pci"` | no |
-| <a name="input_searchdomain"></a> [searchdomain](#input\_searchdomain) | Sets default DNS search domain suffix. | `string` | `null` | no |
+| <a name="input_searchdomain"></a> [searchdomain](#input\_searchdomain) | Sets default DNS search domain suffix. | `string` | `""` | no |
 | <a name="input_serials"></a> [serials](#input\_serials) | Creates a serial device inside the Virtual Machine (up to a max of 4). | <pre>list(object({<br>    id   = optional(number)<br>    type = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_sockets"></a> [sockets](#input\_sockets) | The number of CPU sockets for the Master Node. | `number` | `1` | no |
-| <a name="input_sshkeys"></a> [sshkeys](#input\_sshkeys) | Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user. | `string` | `null` | no |
+| <a name="input_sshkeys"></a> [sshkeys](#input\_sshkeys) | Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user. | `string` | `""` | no |
 | <a name="input_startup"></a> [startup](#input\_startup) | The startup and shutdown behaviour | `string` | `""` | no |
 | <a name="input_tablet"></a> [tablet](#input\_tablet) | Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. | `bool` | `true` | no |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tags of the VM. This is only meta information. | `string` | `null` | no |
-| <a name="input_usbs"></a> [usbs](#input\_usbs) | The usb block is used to configure USB devices. It may be specified multiple times. | <pre>list(object({<br>    host = optional(string)<br>    usb3 = optional(bool)<br>  }))</pre> | `[]` | no |
-| <a name="input_vgas"></a> [vgas](#input\_vgas) | The vga block is used to configure the display device. It may be specified multiple times, however only the first instance of the block will be used. | <pre>list(object({<br>    type   = optional(string)<br>    memory = optional(number)<br>  }))</pre> | `[]` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags of the VM. This is only meta information. | `list(string)` | `[]` | no |
+| <a name="input_usbs"></a> [usbs](#input\_usbs) | The usb block is used to configure USB devices. It may be specified multiple times. | <pre>list(object({<br>    host = optional(string)<br>    usb3 = optional(bool, false)<br>  }))</pre> | `[]` | no |
+| <a name="input_vgas"></a> [vgas](#input\_vgas) | The vga block is used to configure the display device. It may be specified multiple times, however only the first instance of the block will be used. | <pre>list(object({<br>    type   = optional(string, "std")<br>    memory = optional(number)<br>  }))</pre> | `[]` | no |
 | <a name="input_vmid"></a> [vmid](#input\_vmid) | The ID of the VM in Proxmox. The default value of 0 indicates it should use the next available ID in the sequence. | `number` | `0` | no |
 
 ## Outputs

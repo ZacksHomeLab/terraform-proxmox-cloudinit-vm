@@ -28,8 +28,6 @@ Rename `terraform.tfvars.example` to `terraform.tfvars`. Once renamed, modify th
 
 I've pre-configured a network adapter residing in `locals.tf`. Feel free to change the settings of said adapter to get a feel of the syntax. 
 
-For more information on Network Adapters, see the [Network Configuration section on the home-page README.md](../../README.md#network-adapter-configurations).
-
 ## Step 4. Deploy Virtual Machine
 
 Run the following commands to deploy said Virtual Machine
@@ -75,9 +73,9 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_vm_id"></a> [vm\_id](#output\_vm\_id) | The Virtual Machine's Id. |
-| <a name="output_vm_ip"></a> [vm\_ip](#output\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
-| <a name="output_vm_name"></a> [vm\_name](#output\_vm\_name) | The Virtual Machine's name. |
-| <a name="output_vm_node"></a> [vm\_node](#output\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
-| <a name="output_vm_template"></a> [vm\_template](#output\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
+| <a name="output_proxmox_cloudinit_vm_id"></a> [proxmox\_cloudinit\_vm\_id](#output\_proxmox\_cloudinit\_vm\_id) | The Virtual Machine's Id. |
+| <a name="output_proxmox_cloudinit_vm_ip"></a> [proxmox\_cloudinit\_vm\_ip](#output\_proxmox\_cloudinit\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
+| <a name="output_proxmox_cloudinit_vm_name"></a> [proxmox\_cloudinit\_vm\_name](#output\_proxmox\_cloudinit\_vm\_name) | The Virtual Machine's name. |
+| <a name="output_proxmox_cloudinit_vm_node"></a> [proxmox\_cloudinit\_vm\_node](#output\_proxmox\_cloudinit\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
+| <a name="output_proxmox_cloudinit_vm_template"></a> [proxmox\_cloudinit\_vm\_template](#output\_proxmox\_cloudinit\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

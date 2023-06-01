@@ -6,7 +6,7 @@ Network Adapter `net0` is set to DHCP.
 
 Network Adapter `net1` has a static IP assigned.
 
-Network Adapter `net2` has a static IP assigned.
+Network Adapter `net2` has a static IP assigned, different network bridge, and has a tagged VLAN.
 
 ***NOTE:*** If your Virtual Machine template does ***NOT*** have the Cloudinit drive set to `ide2`, the Terraform provider may fail to provision your Virtual Machine.
 
@@ -36,8 +36,6 @@ Rename `terraform.tfvars.example` to `terraform.tfvars`. Once renamed, modify th
 
 I've pre-configured a few network adapters residing in `locals.tf`. Feel free to mess around with the IP Addressing for each of the Network Adapters to understand the syntax. 
 
-For more information on Network Adapters, see the [Network Configuration section on the home-page README.md](../../README.md#network-adapter-configurations).
-
 ## Step 4. Deploy Virtual Machine
 
 Run the following commands to deploy said Virtual Machine
@@ -65,7 +63,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cloudinit_vm"></a> [cloudinit\_vm](#module\_cloudinit\_vm) | ../../ | n/a |
+| <a name="module_multi_nic"></a> [multi\_nic](#module\_multi\_nic) | ../../ | n/a |
 
 ## Resources
 
@@ -83,9 +81,9 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_vm_id"></a> [vm\_id](#output\_vm\_id) | The Virtual Machine's Id. |
-| <a name="output_vm_ip"></a> [vm\_ip](#output\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
-| <a name="output_vm_name"></a> [vm\_name](#output\_vm\_name) | The Virtual Machine's name. |
-| <a name="output_vm_node"></a> [vm\_node](#output\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
-| <a name="output_vm_template"></a> [vm\_template](#output\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
+| <a name="output_proxmox_multi_nic_vm_id"></a> [proxmox\_multi\_nic\_vm\_id](#output\_proxmox\_multi\_nic\_vm\_id) | The Virtual Machine's Id. |
+| <a name="output_proxmox_multi_nic_vm_ip"></a> [proxmox\_multi\_nic\_vm\_ip](#output\_proxmox\_multi\_nic\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
+| <a name="output_proxmox_multi_nic_vm_name"></a> [proxmox\_multi\_nic\_vm\_name](#output\_proxmox\_multi\_nic\_vm\_name) | The Virtual Machine's name. |
+| <a name="output_proxmox_multi_nic_vm_node"></a> [proxmox\_multi\_nic\_vm\_node](#output\_proxmox\_multi\_nic\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
+| <a name="output_proxmox_multi_nic_vm_template"></a> [proxmox\_multi\_nic\_vm\_template](#output\_proxmox\_multi\_nic\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

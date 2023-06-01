@@ -5,49 +5,33 @@ provider "proxmox" {
 module "cloudinit_vm" {
   source = "../../"
 
-  vm_name     = "ubuntu-complete"
-  target_node = var.target_node
-  clone       = var.clone
-
-  onboot = true
-
-  # Specs
-  cores  = local.cores
-  memory = local.memory
-
-  # Disk(s)
-  scsihw = "virtio-scsi-pci"
-
-  disks = local.disks
-
-  # Network Cards
-  networks = [
-    # This will create Network Adapter net0
-    {
-      model  = local.network_model_1
-      bridge = local.network_bridge_1
-    },
-
-    # This will create Network Adapter net1
-    {
-      model  = local.network_model_2
-      bridge = local.network_bridge_2
-    },
-
-    # This will create Network Adapter net2
-    {
-      model  = local.network_model_3
-      bridge = local.network_bridge_3
-    }
-  ]
-
-  # IP Configuration for net0
-  ipconfig0 = local.network_adapter_1
-  ipconfig1 = local.network_adapter_2
-  ipconfig2 = local.network_adapter_3
-
-
-  # Cloudinit settings
-  ciuser  = local.ciuser
-  sshkeys = local.sshkeys != null ? local.sshkeys : null
+  automatic_reboot            = local.automatic_reboot
+  cipassword                  = local.cipassword
+  ciuser                      = local.ciuser
+  clone                       = local.clone
+  cores                       = local.cores
+  cpu                         = local.cpu
+  create_vm                   = local.create_vm
+  description                 = local.description
+  disks                       = local.disks
+  force_create                = local.force_create
+  force_recreate_on_change_of = local.force_recreate_on_change_of
+  hagroup                     = local.hagroup
+  hastate                     = local.hastate
+  hotplug                     = local.hotplug
+  memory                      = local.memory
+  nameserver                  = local.nameserver
+  networks                    = local.networks
+  numa                        = local.numa
+  onboot                      = local.onboot
+  oncreate                    = local.oncreate
+  pool                        = local.pool
+  scsihw                      = local.scsihw
+  searchdomain                = local.searchdomain
+  sockets                     = local.sockets
+  sshkeys                     = local.sshkeys
+  tags                        = local.tags
+  target_node                 = local.target_node
+  vm_name                     = local.vm_name
+  vmid                        = local.vmid
 }

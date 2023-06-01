@@ -10,16 +10,13 @@ module "cloudinit_vm" {
   clone       = var.clone
 
   description = "This is an example Virtual Machine."
-  onboot      = true
 
   # Specs
   cores  = 1
   memory = 1024
 
   # Disk(s)
-  scsihw = "virtio-scsi-pci"
   disks = [
-    # Disk #1
     {
       type    = "virtio"
       storage = var.storage_location
@@ -28,14 +25,5 @@ module "cloudinit_vm" {
   ]
 
   # Network Cards
-  networks = [
-    # NIC #1
-    {
-      model  = "virtio"
-      bridge = "vmbr0"
-    }
-  ]
-
-  # IP Configuration for NIC #1
-  ipconfig0 = local.network_config
+  networks = local.networks
 }
