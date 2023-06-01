@@ -3,8 +3,7 @@ module "terragrunt_wrapper" {
 
   for_each = var.items
 
-  create_vm = try(each.value.create_vm, var.defaults.create_vm, true)
-
+  create_vm                   = try(each.value.create_vm, var.defaults.create_vm, true)
   agent                       = try(each.value.agent, var.defaults.agent, 1)
   automatic_reboot            = try(each.value.automatic_reboot, var.defaults.automatic_reboot, true)
   balloon                     = try(each.value.balloon, var.defaults.balloon, 0)
@@ -33,7 +32,7 @@ module "terragrunt_wrapper" {
   numa                        = try(each.value.numa, var.defaults.numa, false)
   onboot                      = try(each.value.onboot, var.defaults.onboot, false)
   oncreate                    = try(each.value.oncreate, var.defaults.oncreate, true)
-  os_type                     = try(each.value.os_type, var.defaults.os_type, "os_type")
+  os_type                     = try(each.value.os_type, var.defaults.os_type, "cloud-init")
   pool                        = try(each.value.pool, var.defaults.pool, "")
   scsihw                      = try(each.value.scsihw, var.defaults.scsihw, "virtio-scsi-pci")
   searchdomain                = try(each.value.searchdomain, var.defaults.searchdomain, "")
