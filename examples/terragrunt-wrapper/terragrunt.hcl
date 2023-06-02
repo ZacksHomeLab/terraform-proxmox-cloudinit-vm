@@ -11,11 +11,11 @@ locals {
 
   # The name of the Virtual Machine clone
   vm1_clone = "ubuntu2204"
-  vm2_clone = "ubuntu2210"
+  vm2_clone = "ubuntu2204"
 
   # Locations to store said VM
   vm1_storage_location = "local-pve"
-  vm2_storage_location = "other-storage-location"
+  vm2_storage_location = "local-pve"
 }
 
 inputs = {
@@ -44,7 +44,7 @@ inputs = {
     */
     vm-one = {
       clone       = local.vm1_clone
-      target_node = local.vm1_clone
+      target_node = local.vm1_target_node
 
       vm_name = "terragrunt-vm-1"
 
