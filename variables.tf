@@ -22,7 +22,7 @@ variable "balloon" {
 
   validation {
     condition     = var.balloon >= 0 && var.balloon <= 8000000
-    error_message = "The minimum accepted balloon memory amount is 0 (Megabytes). The highest accepted amount is 8000000 (8 Terrabytes)"
+    error_message = "The minimum accepted balloon memory amount is 0 (Megabytes). The highest accepted amount is 8000000 (8 Terrabytes)."
   }
 }
 
@@ -33,7 +33,7 @@ variable "bios" {
 
   validation {
     condition     = contains(["seabios", "ovmf"], var.bios)
-    error_message = "You must select one of the following types of BIOS: seabios, ovmf (aka UEFI)"
+    error_message = "You must select one of the following types of BIOS: seabios, ovmf (aka UEFI)."
   }
 }
 
@@ -92,7 +92,7 @@ variable "cores" {
 
   validation {
     condition     = var.cores > 0 && var.cores <= 256
-    error_message = "CPU Cores must be an integer greater than 0 and less than or equal to 256"
+    error_message = "CPU Cores must be an integer greater than 0 and less than or equal to 256."
   }
 }
 
@@ -103,7 +103,7 @@ variable "cpu" {
 
   validation {
     condition     = contains(["host", "kvm32", "kvm64", "max", "qemu32", "qemu64"], var.cpu)
-    error_message = "You must select one of the following types of CPU: host, kvm32, kvm64, max, qemu32, or qemu64"
+    error_message = "You must select one of the following types of CPU: host, kvm32, kvm64, max, qemu32, or qemu64."
   }
 }
 
@@ -163,7 +163,7 @@ variable "disks" {
 
   validation {
     condition     = alltrue([for disk in var.disks : contains(["directsync", "none", "unsafe", "writeback", "writethrough"], disk.cache)])
-    error_message = "The drive’s cache mode. Options: directsync, none, unsafe, writeback, writethrough"
+    error_message = "The drive’s cache mode. Options: directsync, none, unsafe, writeback, or writethrough."
   }
 
   validation {
@@ -290,7 +290,7 @@ variable "memory" {
 
   validation {
     condition     = var.memory >= 10 && var.memory <= 8000000
-    error_message = "The minimum accepted memory amount is 10 (Megabytes). The highest accepted amount is 8000000 (8 Terrabytes)"
+    error_message = "The minimum accepted memory amount is 10 (Megabytes). The highest accepted amount is 8000000 (8 Terrabytes)."
   }
 }
 
@@ -321,12 +321,12 @@ variable "networks" {
 
   validation {
     condition     = alltrue([for network in var.networks : contains(["e1000", "e1000-82540em", "e1000-82544gc", "e1000-82545em", "i82551", "i82559er", "ne2k_isa", "ne2k_pci", "pcnet", "rtl8139", "virtio", "vmxnet3"], network.model)])
-    error_message = "Required Network Card Model. The virtio model provides the best performance with very low CPU overhead. If your guest does not support this driver, it is usually best to use e1000. Options: e1000, e1000-82540em, e1000-82544gc, e1000-82545em, i82551, i82557b, i82559er, ne2k_isa, ne2k_pci, pcnet, rtl8139, virtio, vmxnet3."
+    error_message = "Required Network Card Model. The virtio model provides the best performance with very low CPU overhead. If your guest does not support this driver, it is usually best to use e1000. Options: e1000, e1000-82540em, e1000-82544gc, e1000-82545em, i82551, i82557b, i82559er, ne2k_isa, ne2k_pci, pcnet, rtl8139, virtio, or vmxnet3."
   }
 
   validation {
     condition     = alltrue([for network in var.networks : network.macaddr == null || can(regex("^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$", network.macaddr))])
-    error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: ^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$"
+    error_message = "If you want to override the generated mac address, you must provide a mac address that fits the regular expression: '^[a-fA-F0-9]{2}(:[a-fA-F0-9]{2}){5}$'."
   }
 
   validation {
@@ -341,7 +341,7 @@ variable "networks" {
 
   validation {
     condition     = alltrue([for network in var.networks : (network.vlan_tag == -1) || (network.vlan_tag >= 1 && network.vlan_tag <= 4094)])
-    error_message = "VLAN tag to apply to packets on this interface. Set a value of 1 to 4094"
+    error_message = "VLAN tag to apply to packets on this interface. Set a value of 1 to 4094."
   }
 
   validation {
@@ -400,7 +400,7 @@ variable "scsihw" {
 
   validation {
     condition     = contains(["lsi", "lsi53c810", "megasas", "pvscsi", "virtio-scsi-pci", "virtio-scsi-single"], var.scsihw)
-    error_message = "You must select one of the following SCSI Controller Options: lsi, lsi53c810, megasas, pvscsi, virtio-scsi-pci, or virtio-scsi-single"
+    error_message = "You must select one of the following SCSI Controller Options: lsi, lsi53c810, megasas, pvscsi, virtio-scsi-pci, or virtio-scsi-single."
   }
 }
 
@@ -427,7 +427,7 @@ variable "sockets" {
 
   validation {
     condition     = var.sockets > 0 && var.sockets <= 24
-    error_message = "CPU Sockets must be an integer greater than 0 and less than or equal to 24"
+    error_message = "CPU Sockets must be an integer greater than 0 and less than or equal to 24."
   }
 }
 
@@ -438,7 +438,7 @@ variable "sshkeys" {
 }
 
 variable "startup" {
-  description = "The startup and shutdown behaviour"
+  description = "The startup and shutdown behaviour."
   type        = string
   default     = ""
 }
