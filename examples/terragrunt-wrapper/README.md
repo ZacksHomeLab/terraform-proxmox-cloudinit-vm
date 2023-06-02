@@ -52,5 +52,3 @@ terragrunt init
 terragrunt plan
 terragrunt apply
 ```
-
-# Terragrunt Multi-VM Deployment Information

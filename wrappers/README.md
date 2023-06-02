@@ -1,9 +1,11 @@
 # Terragrunt Wrapper for Root Module
 
+**NOTE**: This example is for ***Terragrunt***, specifically.
+
 The wrapper in this directory allows you to manage serveral co
 This module allows you to provide multiple Virtual Machine deployments within a single `terragrunt.hcl` file. 
 
-## Using this module in Terragrunt
+## Usage
 
 This example demonstrates how you would deploy two Virtual Machines within the same `terragrunt.hcl`
 
@@ -51,9 +53,9 @@ inputs = {
 }
 ```
 
-## Usage with Terraform
-
 ## Examples
+
+* [Multiple VM Deployment](../examples/terragrunt-wrapper/) - This example expands on [Using this module in Terragrunt](#using-this-module-in-terragrunt) by including local variables.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
