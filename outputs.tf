@@ -1,7 +1,6 @@
 output "proxmox_vm_id" {
   description = "The Virtual Machine's Id."
-  # For example, if I had a VM id of "pvme1/qemu/114", this will return 114
-  value = try(tonumber(element(split("/", proxmox_vm_qemu.cloudinit[*].id), length(split("/", proxmox_vm_qemu.cloudinit[*].id)) - 1)), "")
+  value       = try([for vm in proxmox_vm_qemu.cloudinit : tonumber(element(split("/", vm.id), length(split("/", vm.id)) - 1))], "")
 }
 
 output "proxmox_vm_ip" {
