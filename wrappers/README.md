@@ -32,7 +32,7 @@ inputs = {
       type    = "virtio"
     }]
 
-    network = [{
+    networks = [{
       dhcp   = true
       bridge = "vmbr0"
     }]
