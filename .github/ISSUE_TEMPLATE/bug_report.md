@@ -1,10 +1,8 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG]"
 labels: bug
 assignees: ZacksHomeLab
-
 ---
 
 ## Description
@@ -12,45 +10,47 @@ Please provide a detailed and concise description of the issue you are facing. A
 
 If your request is for a new feature, please use the `Feature request` template.
 
+## ⚠️ Note ⚠️
+
 **Before you submit an issue, please perform the following:**
 
-- [ ] (**ONLY** if you store your state remotely) I have removed the local `.terraform` directory. This step is to insure you're re-initializing this module.
+- [ ] (**ONLY** if you store your state remotely) I have removed the local `.terraform` directory. This step is to insure you've re-initializing this module.
 - [ ] I have re-initialized the project via `terraform init`.
 - [ ] I have tried multiple times to run `terraform plan` and `terraform apply`, but the issue still persists.
 
 ## Versions 
 
 - (Required) Module Version: 
-- Terraform Version (`terraform -version`): 
-- (Optional) Terragrunt Version (`terragrunt -version`):
-- Provider Version (`terraform providers -version`): 
 
-## Required: Steps to Reproduce
+- Terraform Version:
+<!-- Execute command: terraform -version --> 
+- (Optional) Terragrunt Version:
+<!-- Execute command: terragrunt -version --> 
+- Provider(s) Version: 
+<!-- Execute command: terraform providers -version -->
 
-**Sample Code**
+## Reproduction Code [Required]
 
-Please provide the sample code that triggered said issue:
+<!-- REQUIRED -->
 
-```
+Steps to reproduce the behavior:
 
-```
-
-**Steps to Reproduce Issue**
-
-List steps in order that led up to the issue you encountered.
+<!-- Are you using workspaces? -->
+<!-- Have you cleared the local cache (see Notice section above)? -->
+<!-- List steps in order that led up to the issue you encountered -->
 
 ## Expected behavior
 
-A clear and concise description of what you expected to happen.
+<!-- A clear and concise description of what you expected to happen -->
 
 ## Actual behavior
 
-A clear and concise description of what actually happened.
+<!-- A clear and concise description of what actually happened -->
 
-## Optional: Terminal Output / Screenshots
+### Terminal Output Screenshot(s)
 
-If you can, please provide the terminal output that you've received. You may need to enable debugging by running `export TF_LOG=trace`. 
+<!-- Optional but helpful -->
 
-## Additional Comments
+## Additional context
 
-Any other comments regarding your issue, please post them here.
+<!-- Add any other context about the problem here -->
