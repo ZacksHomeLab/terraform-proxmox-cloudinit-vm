@@ -475,7 +475,7 @@ Removed from this module is configuring SSD Emulation for disks. If your templat
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=0.14 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >=1.3.0 |
 | <a name="requirement_proxmox"></a> [proxmox](#requirement\_proxmox) | 2.9.14 |
 
 ## Providers
@@ -537,7 +537,7 @@ No modules.
 | <a name="input_serials"></a> [serials](#input\_serials) | Creates a serial device inside the Virtual Machine (up to a max of 4). | <pre>list(object({<br>    id   = optional(number)<br>    type = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_sockets"></a> [sockets](#input\_sockets) | The number of CPU sockets for the Master Node. | `number` | `1` | no |
 | <a name="input_sshkeys"></a> [sshkeys](#input\_sshkeys) | Newline delimited list of SSH public keys to add to authorized keys file for the cloud-init user. | `string` | `""` | no |
-| <a name="input_startup"></a> [startup](#input\_startup) | The startup and shutdown behaviour | `string` | `""` | no |
+| <a name="input_startup"></a> [startup](#input\_startup) | The startup and shutdown behaviour. | `string` | `""` | no |
 | <a name="input_tablet"></a> [tablet](#input\_tablet) | Enable/disable the USB tablet device. This device is usually needed to allow absolute mouse positioning with VNC. | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags of the VM. This is only meta information. | `list(string)` | `[]` | no |
 | <a name="input_usbs"></a> [usbs](#input\_usbs) | The usb block is used to configure USB devices. It may be specified multiple times. | <pre>list(object({<br>    host = optional(string)<br>    usb3 = optional(bool, false)<br>  }))</pre> | `[]` | no |
