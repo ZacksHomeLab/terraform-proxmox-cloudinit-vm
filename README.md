@@ -348,6 +348,8 @@ Terraform should display status code `500`.
 
 ## Issue: Cloudinit drive already exists
 
+**NOTE: This issue should be resolved in v1.6.1**
+
 From my testing, if you have your Cloudinit drive on anything other than `ide2`, you may experience the following error
 
 ```
@@ -357,6 +359,8 @@ Cloudinit drive already exists on drive ...
 This error occurs frequenly when you try to add additonal hardware that was **NOT** present with your Virtual Machine template. To resolve this, you may need to adjust your Virtual Machine template and have the Cloudinit drive mounted to `ide2`. [Follow the steps under `Getting Started`.](#getting-started)
 
 ## Issue: Terraform expects Cloudinit changes
+
+**NOTE: This issue should be resolved in v1.6.1**
 
 If your Virtual Machine template has preconfigured Cloudinit settings For example:
 

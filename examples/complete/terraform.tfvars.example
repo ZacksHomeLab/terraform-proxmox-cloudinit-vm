@@ -4,6 +4,5 @@ target_node = "pve1"
 # What's the name of the Virtual Machine template that will be used to create a clone of?
 clone = "ubuntu-2204"
 
-# Virtual Machine Storage Location(s)
-storage_location_1 = "local-pve"
-storage_location_2 = "zfs-pool1"
+# Virtual Machine Storage Location
+storage_location = "local-pve"

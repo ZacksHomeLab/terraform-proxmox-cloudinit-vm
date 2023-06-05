@@ -135,4 +135,9 @@ resource "proxmox_vm_qemu" "cloudinit" {
   ipconfig15 = local.ipconfig15 != null ? local.ipconfig15 : ""
 
   tags = var.tags != null ? join(",", var.tags) : ""
+
+  lifecycle {
+    # These cause a lot of problems if they're not ignored.
+    ignore_changes = [ciuser, sshkeys, disk, network]
+  }
 }
