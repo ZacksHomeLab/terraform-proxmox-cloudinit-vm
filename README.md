@@ -226,7 +226,7 @@ The following commands will perform the following:
 * (Optional): Set CPU Type to `host`. This is necessary if you plan on running any sort of nested virtualization on said Virtual Machine (e.g., Docker, Hyper-V, etc.)
 ```bash
 qm set $VM_ID --ide0 file=none && \
-qm set $VM_ID --ide2 $STORAGE_POOL:Cloudinit && \
+qm set $VM_ID --ide2 $STORAGE_POOL:cloudinit && \
 qm set $VM_ID --boot "order=ide0;virtio0;net0" --bootdisk virtio0 && \
 qm set $VM_ID --ostype l26 && \
 qm set $VM_ID --serial0 socket --vga serial0
