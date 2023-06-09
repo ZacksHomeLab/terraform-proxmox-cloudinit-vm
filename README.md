@@ -218,14 +218,19 @@ qm set $VM_ID --agent enabled=1,fstrim_cloned_disks=1
 ```
 
 The following commands will perform the following:
+* Create a variable to determine the location of our imported disk. This is necessary as some storage pools create the destination directory differently. A variable fixes said inconsistencies.
 * Add a CD-ROM to `ide0` (in case you need to reinstall the Virtual Machine at a later date)
+* Import the unused disk image as a `virtio0` disk. This requires scsihw `virtio-scsi-pci`
 * Add a Cloudinit drive to `ide2`
 * Set the boot order to `CD-ROM (ide0) -> Disk (virtio0) -> Network Adapter (net0)` and set the bootdisk to disk `virtio0`
 * Set the OS Type to `Linux: 6.x - 2.6 Kernel` 
 * Add a serial adapter `serial0` and update our display to `serial0`
 * (Optional): Set CPU Type to `host`. This is necessary if you plan on running any sort of nested virtualization on said Virtual Machine (e.g., Docker, Hyper-V, etc.)
 ```bash
+export DISK_LOC="$STORAGE_POOL:$(qm config $VM_ID | grep -Po "(?<=unused\d: $STORAGE_POOL:).*")"
+
 qm set $VM_ID --ide0 file=none && \
+qm set $VM_ID --scsihw virtio-scsi-pci --virtio0 $DISK_LOC && \
 qm set $VM_ID --ide2 $STORAGE_POOL:cloudinit && \
 qm set $VM_ID --boot "order=ide0;virtio0;net0" --bootdisk virtio0 && \
 qm set $VM_ID --ostype l26 && \
