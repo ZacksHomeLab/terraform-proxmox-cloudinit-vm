@@ -175,6 +175,8 @@ apt-get -y install libguestfs-tools
   
 ```bash
 virt-customize -a jammy-server-cloudimg-amd64.img --install qemu-guest-agent
+
+virt-customize -a jammy-server-cloudimg-amd64.img --run-command "systemctl enable qemu-guest-agent"
 ```
 * (OPTIONAL): If you're **NOT** using an SSL Certificate within Cloudinit drive on said Virtual Machine, you'll need to modify SSH in said image to allow local authentication, which can be done running said command
   
