@@ -44,4 +44,3 @@ output "vmid" {
   description = "The Virtual Machine's Id."
   value       = var.create_vm ? tonumber(element(split("/", proxmox_vm_qemu.cloudinit[0].id), length(split("/", proxmox_vm_qemu.cloudinit[0].id)) - 1)) : null
 }
-
