@@ -73,9 +73,12 @@ No resources.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_proxmox_cloudinit_vm_id"></a> [proxmox\_cloudinit\_vm\_id](#output\_proxmox\_cloudinit\_vm\_id) | The Virtual Machine's Id. |
-| <a name="output_proxmox_cloudinit_vm_ip"></a> [proxmox\_cloudinit\_vm\_ip](#output\_proxmox\_cloudinit\_vm\_ip) | The Virtual Machine's IP on the first Network Adapter. |
-| <a name="output_proxmox_cloudinit_vm_name"></a> [proxmox\_cloudinit\_vm\_name](#output\_proxmox\_cloudinit\_vm\_name) | The Virtual Machine's name. |
-| <a name="output_proxmox_cloudinit_vm_node"></a> [proxmox\_cloudinit\_vm\_node](#output\_proxmox\_cloudinit\_vm\_node) | The Proxmox Node the Virtual Machine was created on. |
-| <a name="output_proxmox_cloudinit_vm_template"></a> [proxmox\_cloudinit\_vm\_template](#output\_proxmox\_cloudinit\_vm\_template) | The name of the template in which the Virtual Machine was created on. |
+| <a name="output_disks"></a> [disks](#output\_disks) | The Disk(s) affiliated with said Virtual Machine. |
+| <a name="output_ip"></a> [ip](#output\_ip) | The Virtual Machine's IP on the first Network Adapter. |
+| <a name="output_name"></a> [name](#output\_name) | The Virtual Machine's name. |
+| <a name="output_nics"></a> [nics](#output\_nics) | The Network Adapter(s) affiliated with said Virtual Machine. |
+| <a name="output_node"></a> [node](#output\_node) | The Proxmox Node the Virtual Machine was created on. |
+| <a name="output_ssh"></a> [ssh](#output\_ssh) | The Virtual Machine's SSH Settings. |
+| <a name="output_template"></a> [template](#output\_template) | The name of the template in which the Virtual Machine was created on. |
+| <a name="output_vmid"></a> [vmid](#output\_vmid) | The Virtual Machine's Id. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
