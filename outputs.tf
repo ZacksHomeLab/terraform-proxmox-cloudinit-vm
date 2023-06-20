@@ -1,24 +1,47 @@
-output "proxmox_vm_id" {
-  description = "The Virtual Machine's Id."
-  value       = try([for vm in proxmox_vm_qemu.cloudinit : tonumber(element(split("/", vm.id), length(split("/", vm.id)) - 1))], "")
+output "disks" {
+  description = "The Disk(s) affiliated with said Virtual Machine."
+  value       = var.create_vm ? { for i, disk in proxmox_vm_qemu.cloudinit[0].disk : i => disk } : null
 }
 
-output "proxmox_vm_ip" {
+output "ip" {
   description = "The Virtual Machine's IP on the first Network Adapter."
-  value       = proxmox_vm_qemu.cloudinit[*].ssh_host
+  value       = var.create_vm ? proxmox_vm_qemu.cloudinit[0].default_ipv4_address : null
 }
 
-output "proxmox_vm_name" {
+output "name" {
   description = "The Virtual Machine's name."
-  value       = proxmox_vm_qemu.cloudinit[*].name
+  value       = var.create_vm ? proxmox_vm_qemu.cloudinit[0].name : null
 }
 
-output "proxmox_vm_template" {
-  description = "The name of the template in which the Virtual Machine was created on."
-  value       = proxmox_vm_qemu.cloudinit[*].clone
+output "nics" {
+  description = "The Network Adapter(s) affiliated with said Virtual Machine."
+  value       = var.create_vm ? { for i, network in proxmox_vm_qemu.cloudinit[0].network : i => network } : null
 }
 
-output "proxmox_vm_node" {
+output "node" {
   description = "The Proxmox Node the Virtual Machine was created on."
-  value       = proxmox_vm_qemu.cloudinit[*].target_node
+  value       = var.create_vm ? proxmox_vm_qemu.cloudinit[0].target_node : null
 }
+
+output "ssh_settings" {
+  description = "The Virtual Machine's SSH Settings."
+  value = var.create_vm ? {
+    ssh_host = try(proxmox_vm_qemu.cloudinit[0].ssh_host, "")
+    ssh_port = try(proxmox_vm_qemu.cloudinit[0].ssh_port, "")
+    ssh_user = try(proxmox_vm_qemu.cloudinit[0].ssh_user, "")
+    sshkeys  = try(proxmox_vm_qemu.cloudinit[0].sshkeys, "")
+  } : null
+
+  sensitive = true
+}
+
+output "template" {
+  description = "The name of the template in which the Virtual Machine was created on."
+  value       = var.create_vm ? proxmox_vm_qemu.cloudinit[0].clone : null
+}
+
+output "vmid" {
+  description = "The Virtual Machine's Id."
+  value       = var.create_vm ? tonumber(element(split("/", proxmox_vm_qemu.cloudinit[0].id), length(split("/", proxmox_vm_qemu.cloudinit[0].id)) - 1)) : null
+}
+
