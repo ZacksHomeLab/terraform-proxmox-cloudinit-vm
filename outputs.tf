@@ -28,7 +28,7 @@ output "ssh_settings" {
   value = var.create_vm ? {
     ssh_host = try(proxmox_vm_qemu.cloudinit[0].ssh_host, "")
     ssh_port = try(proxmox_vm_qemu.cloudinit[0].ssh_port, "")
-    ssh_user = try(proxmox_vm_qemu.cloudinit[0].ssh_user, "")
+    ssh_user = try(proxmox_vm_qemu.cloudinit[0].ssh_user != null ? proxmox_vm_qemu.cloudinit[0].ssh_user : proxmox_vm_qemu.cloudinit[0].ciuser, "")
     sshkeys  = try(proxmox_vm_qemu.cloudinit[0].sshkeys, "")
   } : null
 
